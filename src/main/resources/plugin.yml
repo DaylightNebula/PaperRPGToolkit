@@ -1,0 +1,7 @@
+name: PaperRPGToolkit
+version: '${version}'
+main: daylightnebula.paperrpgtoolkit.PaperRPGToolkit
+api-version: 1.19
+load: STARTUP
+authors: [ DaylightNebula ]
+description: An RPG Toolkit for Minecraft Paper Servers
