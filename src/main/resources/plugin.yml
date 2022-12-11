@@ -5,3 +5,7 @@ api-version: 1.19
 load: STARTUP
 authors: [ DaylightNebula ]
 description: An RPG Toolkit for Minecraft Paper Servers
+commands:
+  getcustomitem:
+    description: Get custom item
+    usage: /getcustomitem <name or id> [amount]
