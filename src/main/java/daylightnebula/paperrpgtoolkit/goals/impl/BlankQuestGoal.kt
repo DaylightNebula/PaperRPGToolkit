@@ -11,4 +11,7 @@ class BlankQuestGoal: Goal() {
     override fun getDescriptionText(player: Player): String {
         return ""
     }
+
+    override fun startForPlayer(player: Player) {}
+    override fun stopForPlayer(player: Player) {}
 }

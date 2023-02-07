@@ -11,7 +11,7 @@ class TestQuestChain: QuestChain(
     "Test Quest Chain",
     "Bestest test quest chain"
 ) {
-    override fun setupQuests(): Array<QuestLink> {
+    override fun setupLinks(): Array<QuestLink> {
         return arrayOf(
             QuestLink(
                 this,

@@ -39,7 +39,7 @@ class EndQuestChainCommand: CommandExecutor {
         if (!sender.isOp) return false
 
         // try to get a quest chain of the sender
-        val questChain = QuestChain.questChains.values.firstOrNull { it.questState.containsKey(sender) }
+        val questChain = QuestChain.questChains.values.firstOrNull { it.linkTracker.containsKey(sender) }
 
         // if no quest chain was found, error and cancel
         if (questChain == null) {
@@ -59,7 +59,7 @@ class AdvanceQuestChainCommand: CommandExecutor {
         if (!sender.isOp) return false
 
         // try to get a quest chain of the sender
-        val questChain = QuestChain.questChains.values.firstOrNull { it.questState.containsKey(sender) }
+        val questChain = QuestChain.questChains.values.firstOrNull { it.linkTracker.containsKey(sender) }
 
         // if no quest chain was found, error and cancel
         if (questChain == null) {

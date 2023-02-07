@@ -8,8 +8,11 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.util.Vector
+import java.util.UUID
 
 class GotoLocationGoal(private val location: Vector, private val maxActivateDistance: Float): Listener, Goal() {
+
+    val activePlayers = mutableListOf<UUID>()
 
     init {
         Bukkit.getPluginManager().registerEvents(this, PaperRPGToolkit.plugin)
@@ -18,7 +21,7 @@ class GotoLocationGoal(private val location: Vector, private val maxActivateDist
     @EventHandler
     fun onPlayerMove(event: PlayerMoveEvent) {
         // make sure player has this quest
-        if (!playerHasGoal(event.player)) return
+        if (!activePlayers.contains(event.player.uniqueId)) return
 
         // if player is within the activation distance of the location, end the quest
         if (event.player.location.toVector().distance(location) < maxActivateDistance)
@@ -27,6 +30,9 @@ class GotoLocationGoal(private val location: Vector, private val maxActivateDist
         else
             descriptionChanged(event.player)
     }
+
+    override fun startForPlayer(player: Player) { activePlayers.add(player.uniqueId) }
+    override fun stopForPlayer(player: Player) { activePlayers.remove(player.uniqueId) }
 
     override fun forceComplete(player: Player) {
         player.teleport(location.toLocation(player.world))

@@ -1,6 +1,6 @@
 package daylightnebula.paperrpgtoolkit.quests
 
-import daylightnebula.paperrpgtoolkit.GoalInterface
+import daylightnebula.paperrpgtoolkit.goals.GoalInterface
 import daylightnebula.paperrpgtoolkit.goals.Goal
 import org.bukkit.entity.Player
 
@@ -16,9 +16,8 @@ class QuestLink(
         goal.init(this)
     }
 
-    override fun doesPlayerHasGoal(player: Player, goal: Goal): Boolean {
-        return QuestChain.curQuest[player] == chain.id && chain.quests[chain.questState[player] ?: return false] == this
-    }
+    fun startForPlayer(player: Player) { goal.startForPlayer(player) }
+    fun stopForPlayer(player: Player) { goal.stopForPlayer(player) }
 
     override fun goalComplete(player: Player, goal: Goal) {
         onQuestComplete(player)

@@ -15,10 +15,10 @@ abstract class QuestChain(
         val curQuest = hashMapOf<Player, String>()
     }
 
-    val quests = setupQuests()
+    val links = setupLinks()
 
     // tracks which
-    val questState = hashMapOf<Player, Int>()
+    val linkTracker = hashMapOf<Player, Int>()
 
     init {
         questChains[id] = this
@@ -26,13 +26,13 @@ abstract class QuestChain(
 
     fun updateSidebarForPlayer(player: Player) {
         // if the player is no longer on the quest chain, set players scoreboard to a blank scoreboard and cancel
-        if (!questState.containsKey(player)) {
+        if (!linkTracker.containsKey(player)) {
             player.scoreboard = Bukkit.getScoreboardManager().newScoreboard
             return
         }
 
         // get current quest
-        val quest = quests[questState[player]!!]
+        val quest = links[linkTracker[player]!!]
 
         // paginate the quest description so that it fits in the sidebar
         val descriptionLines = ChatPaginator.wordWrap("§f${quest.description}", if (quest.name.length > 16) quest.name.length else 16)
@@ -50,28 +50,35 @@ abstract class QuestChain(
 
     fun startForPlayer(player: Player) {
         // add the given player to the quest state tracking map
-        questState[player] = 0
+        links.first().startForPlayer(player)
+        linkTracker[player] = 0
         curQuest[player] = id
         updateSidebarForPlayer(player)
     }
 
     fun proceedToNextQuest(player: Player) {
         // make sure the given player has started this quest
-        if (!questState.containsKey(player)) return //throw NullPointerException("Attempting to proceed in quest for a player that has not started quest chain $name")
+        if (!linkTracker.containsKey(player)) return //throw NullPointerException("Attempting to proceed in quest for a player that has not started quest chain $name")
+
+        // stop current quest
+        links[linkTracker[player]!!].stopForPlayer(player)
 
         // get and then set the new quest number for the given player
-        val newCount = questState[player]!! + 1
-        questState[player] = newCount
+        val newCount = linkTracker[player]!! + 1
+        linkTracker[player] = newCount
 
-        // if the new count has exceeded the quests size, the player has complete this quest chain so call the end function
-        if (newCount >= quests.size)
+        // if new count is in range of the links array, start next quest
+        if (newCount < links.size)
+            links[linkTracker[player]!!].startForPlayer(player)
+        // otherwise, the player has complete this quest chain so call the end function
+        else
             endForPlayer(player, true)
         updateSidebarForPlayer(player)
     }
 
     fun endForPlayer(player: Player, reward: Boolean) {
         // remove the given player from the quest state tracking map
-        questState.remove(player)
+        linkTracker.remove(player)
 
         // remove from quest chain tracker
         if (curQuest[player] == id)
@@ -83,6 +90,6 @@ abstract class QuestChain(
         updateSidebarForPlayer(player)
     }
 
-    abstract fun setupQuests(): Array<QuestLink>
+    abstract fun setupLinks(): Array<QuestLink>
     abstract fun onQuestChainComplete(player: Player)
 }

@@ -29,7 +29,7 @@ class GetItemGoal(private val targetItem: ItemStack, private val minCount: Int):
         val numAdded = event.item.itemStack.amount
 
         // make sure player has quest
-        if (!playerHasGoal(player)) return
+        if (!countMap.containsKey(player.uniqueId)) return
 
         val valid =
             // if item is custom, check id to check if valid
@@ -45,10 +45,8 @@ class GetItemGoal(private val targetItem: ItemStack, private val minCount: Int):
             val newCount = (countMap[player.uniqueId] ?: 0) + numAdded
 
             // if new count exceeds the count, remove the player from the count map and finish the quest
-            if (newCount >= minCount) {
-                countMap.remove(player.uniqueId)
+            if (newCount >= minCount)
                 finishQuest(player)
-            }
             // otherwise, update tracker
             else {
                 // update tracker
@@ -58,12 +56,15 @@ class GetItemGoal(private val targetItem: ItemStack, private val minCount: Int):
         }
     }
 
+    override fun startForPlayer(player: Player) { countMap[player.uniqueId] = 0 }
+    override fun stopForPlayer(player: Player) { countMap.remove(player.uniqueId) }
+
     override fun forceComplete(player: Player) {
         player.inventory.addItemWithEvent(targetItem.clone().apply { amount = minCount })
     }
 
     override fun getDescriptionText(player: Player): String {
-        val curCount = countMap[player.uniqueId] ?: return "0/$minCount"
+        val curCount = countMap[player.uniqueId] ?: return ""
         return "$curCount/$minCount"
     }
 }
