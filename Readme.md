@@ -16,8 +16,8 @@
    - [x] Spawn NPC command
    - [x] Remove NPC command
    - [x] Right click detection
-   - [ ] Quest goal: Give item to NPC (click NPC with item) (optional remove item)
-   - [ ] Quest goal: Talk to NPC
+   - [x] Goal: Give item to NPC (click NPC with item) (optional remove item)
+   - [ ] Goal: Finish dialogue (talk to NPC goal, idea is that it is better to finish the goal after the dialogue is done)
    - [ ] Give quests after talking to NPC
    - [ ] Dialogue
      - [ ] Dialogue chains
