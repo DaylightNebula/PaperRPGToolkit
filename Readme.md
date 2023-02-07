@@ -11,7 +11,7 @@
      - [x] Collect item (with number)
      - [x] Collect custom item
      - [x] Go to location (with acceptable radius)
-     - [ ] Kill number of entities (optional location and radius to get the kills)
+     - [x] Kill number of entities (optional location and radius to get the kills)
  - [ ] Custom NPCs
    - [ ] Spawn NPC command
    - [ ] Click detection
