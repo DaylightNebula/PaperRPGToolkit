@@ -11,4 +11,5 @@ class TestNPC: NPC(
     EntityType.VILLAGER
 ) {
     override fun onCreateNewEntity(entity: Entity) {}
+    override fun onClickEntity0() { println("Click detected") }
 }
