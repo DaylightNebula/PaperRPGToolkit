@@ -1,8 +1,9 @@
-package daylightnebula.paperrpgtoolkit.quests.goals
+package daylightnebula.paperrpgtoolkit.goals.impl
 
+import daylightnebula.paperrpgtoolkit.goals.Goal
 import org.bukkit.entity.Player
 
-class BlankQuestGoal: QuestGoal() {
+class BlankQuestGoal: Goal() {
     override fun forceComplete(player: Player) {
         finishQuest(player)
     }

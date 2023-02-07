@@ -3,6 +3,7 @@ package daylightnebula.paperrpgtoolkit.items
 import org.bukkit.Material
 
 class TestSwordItem: CustomItem(
+    "testsword",
     Material.IRON_SWORD,
     "Test Sword",
     "Bestest Test Sword",

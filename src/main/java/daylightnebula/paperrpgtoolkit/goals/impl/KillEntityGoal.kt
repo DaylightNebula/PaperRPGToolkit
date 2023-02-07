@@ -1,8 +1,8 @@
-package daylightnebula.paperrpgtoolkit.quests.goals
+package daylightnebula.paperrpgtoolkit.goals.impl
 
 import daylightnebula.paperrpgtoolkit.PaperRPGToolkit
+import daylightnebula.paperrpgtoolkit.goals.Goal
 import org.bukkit.Bukkit
-import org.bukkit.Location
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -18,7 +18,7 @@ class KillEntityGoal(
     private val minKills: Int,
     private val location: Vector? = null,
     private val radius: Float = 1f
-): Listener, QuestGoal() {
+): Listener, Goal() {
 
     private val killsCounter = hashMapOf<UUID, Int>()
 
@@ -36,7 +36,7 @@ class KillEntityGoal(
         val killedBy = (target.lastDamageCause as? EntityDamageByEntityEvent ?: return).damager as? Player ?: return
 
         // if killed by is not in the quest, cancel
-        if (!playerHasQuest(killedBy)) return
+        if (!playerHasGoal(killedBy)) return
 
         // if we were given a location, make sure the player is within the given radius of that location
         if (location != null && target.location.toVector().distanceSquared(location) > radius.pow(2f)) return
@@ -52,7 +52,7 @@ class KillEntityGoal(
         // otherwise, update the kill tracker and update the scoreboard
         else {
             killsCounter[killedBy.uniqueId] = newKills
-            quest?.chain?.updateSidebarForPlayer(killedBy)
+            descriptionChanged(killedBy)
         }
     }
 

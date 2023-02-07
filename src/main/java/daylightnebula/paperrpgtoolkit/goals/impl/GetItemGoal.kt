@@ -1,7 +1,8 @@
-package daylightnebula.paperrpgtoolkit.quests.goals
+package daylightnebula.paperrpgtoolkit.goals.impl
 
 import daylightnebula.paperrpgtoolkit.PaperRPGToolkit
 import daylightnebula.paperrpgtoolkit.addItemWithEvent
+import daylightnebula.paperrpgtoolkit.goals.Goal
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -11,7 +12,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 import java.util.*
 
-class GetItemGoal(private val targetItem: ItemStack, private val minCount: Int): QuestGoal(), Listener {
+class GetItemGoal(private val targetItem: ItemStack, private val minCount: Int): Goal(), Listener {
     private val isCustom = targetItem.itemMeta.persistentDataContainer.has(PaperRPGToolkit.customItemReferenceIDKey)
     private val itemName = if (isCustom) targetItem.itemMeta.persistentDataContainer.get(PaperRPGToolkit.customItemReferenceIDKey, PersistentDataType.STRING) else ""
 
@@ -28,7 +29,7 @@ class GetItemGoal(private val targetItem: ItemStack, private val minCount: Int):
         val numAdded = event.item.itemStack.amount
 
         // make sure player has quest
-        if (!playerHasQuest(player)) return
+        if (!playerHasGoal(player)) return
 
         val valid =
             // if item is custom, check id to check if valid
@@ -52,7 +53,7 @@ class GetItemGoal(private val targetItem: ItemStack, private val minCount: Int):
             else {
                 // update tracker
                 countMap[player.uniqueId] = newCount
-                quest?.chain?.updateSidebarForPlayer(player)
+                descriptionChanged(player)
             }
         }
     }

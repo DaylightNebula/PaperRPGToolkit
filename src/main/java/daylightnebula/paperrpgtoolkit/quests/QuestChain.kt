@@ -2,10 +2,8 @@ package daylightnebula.paperrpgtoolkit.quests
 
 import daylightnebula.paperrpgtoolkit.buildScoreboard
 import org.bukkit.Bukkit
-import org.bukkit.ChatColor
 import org.bukkit.entity.Player
 import org.bukkit.util.ChatPaginator
-import java.lang.NullPointerException
 
 abstract class QuestChain(
     val id: String,
@@ -85,6 +83,6 @@ abstract class QuestChain(
         updateSidebarForPlayer(player)
     }
 
-    abstract fun setupQuests(): Array<Quest>
+    abstract fun setupQuests(): Array<QuestLink>
     abstract fun onQuestChainComplete(player: Player)
 }
