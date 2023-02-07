@@ -4,10 +4,10 @@
    - [x] Fields and functions to set attack speed and damage
    - [x] Left and right click detection (with limits on both (1/2 second))
    - [x] Name and description fields that convert to components
- - [ ] Quest Chains
+ - [x] Quest Chains
    - [x] Start and force end quest command
    - [x] Current quest shows up in the sidebar
-   - [ ] Quests goals:
+   - [x] Quests goals:
      - [x] Collect item (with number)
      - [x] Collect custom item
      - [x] Go to location (with acceptable radius)
