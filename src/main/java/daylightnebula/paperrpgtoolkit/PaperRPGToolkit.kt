@@ -1,5 +1,6 @@
 package daylightnebula.paperrpgtoolkit
 
+import daylightnebula.paperrpgtoolkit.dialogue.DialogueChain
 import daylightnebula.paperrpgtoolkit.items.CustomItem
 import daylightnebula.paperrpgtoolkit.items.CustomItemCommand
 import daylightnebula.paperrpgtoolkit.items.TestSwordItem
@@ -35,6 +36,9 @@ class PaperRPGToolkit : JavaPlugin() {
 
         // commands
         registerCommands()
+
+        // start the update loops
+        DialogueChain.startUpdateLoop()
 
         // if tests are enabled, init them
         if (testsEnabled) TestStuff.init()

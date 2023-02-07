@@ -38,7 +38,7 @@ class EventListener : Listener {
         val target = event.rightClicked
 
         // check if target entity is an NPC
-        val npc = NPC.activeNPCs[target] ?: return
+        val npc = NPC.npcs.values.firstOrNull { it.entities.contains(target) } ?: return
 
         // cancel the event
         event.isCancelled = true

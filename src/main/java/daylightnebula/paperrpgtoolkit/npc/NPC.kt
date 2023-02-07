@@ -10,34 +10,30 @@ import kotlin.math.pow
 
 abstract class NPC(
     id: String,
-    val name: Component?,
-    val entityType: EntityType
+    val name: String?,
+    private val entityType: EntityType
 ) {
 
     companion object {
         val npcs = hashMapOf<String, NPC>()
-        val activeNPCs = hashMapOf<Entity, NPC>()
 
         fun removeNearLocation(location: Location, radius: Float) {
             // get nearby entities and loop through them
             val radiusSq = radius.pow(2f)
-            activeNPCs.keys.filter { it.location.distanceSquared(location) < radiusSq }.forEach {
-                // kill the entity
-                it.remove()
-
-                // remove them from active list
-                activeNPCs.remove(it)
+            npcs.values.forEach { npc ->
+                npc.removeEntities(
+                    npc.entities.filter { it.location.distanceSquared(location) < radiusSq }
+                )
             }
-
         }
 
         fun removeAllNPCs() {
-            activeNPCs.keys.forEach {
-                it.remove()
-            }
-            activeNPCs.clear()
+            // remove all the npcs entities
+            npcs.values.forEach { it.removeEntities(it.entities) }
         }
     }
+
+    val entities = mutableListOf<Entity>()
 
     init {
         npcs[id] = this
@@ -59,12 +55,12 @@ abstract class NPC(
 
         // set the entities name
         if (name != null) {
-            entity.customName(name)
+            entity.customName(Component.text(name))
             entity.isCustomNameVisible = true
         }
 
         // save to active npc list
-        activeNPCs[entity] = this
+        entities.add(entity)
 
         // return the entity
         return entity
@@ -72,6 +68,12 @@ abstract class NPC(
 
     fun onRightClick(event: PlayerInteractEntityEvent) {
         onRightClick0(event)
+    }
+
+    fun removeEntities(toRemove: List<Entity>) {
+        // kill all the entities and remove them from the entities list
+        toRemove.forEach { it.remove() }
+        entities.removeAll(toRemove.toSet())
     }
 
     abstract fun onCreateNewEntity(entity: Entity)
