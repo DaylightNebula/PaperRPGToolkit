@@ -5,7 +5,7 @@ import org.bukkit.entity.Player
 
 class BlankQuestGoal: Goal() {
     override fun forceComplete(player: Player) {
-        finishQuest(player)
+        finishGoal(player)
     }
 
     override fun getDescriptionText(player: Player): String {

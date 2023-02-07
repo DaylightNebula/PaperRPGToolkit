@@ -24,8 +24,8 @@
        - [ ] Disable standard chat for the player while they are in the dialogue
      - [ ] Dialogue goals
        - [x] Convert quest goals to general purpose goals
-       - [ ] Press shift goal
-       - [ ] Press hot bat number and switch dialogue chain
+       - [x] Press shift goal
+       - [x] Press hot bar number and switch dialogue chain
  - [ ] Custom Resource Pack
    - [ ] Generate item models from .bbmodel files or just textures
    - [ ] Add custom model support for items

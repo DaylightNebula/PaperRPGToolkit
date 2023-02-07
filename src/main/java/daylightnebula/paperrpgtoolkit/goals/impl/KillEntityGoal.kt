@@ -46,7 +46,7 @@ class KillEntityGoal(
 
         // if new kills exceeds min kill count, stop the quest and remove the player from the tracker
         if (newKills >= minKills) {
-            finishQuest(killedBy)
+            finishGoal(killedBy)
         }
         // otherwise, update the kill tracker and update the scoreboard
         else {
@@ -59,7 +59,7 @@ class KillEntityGoal(
     override fun stopForPlayer(player: Player) { killsCounter.remove(player.uniqueId) }
 
     override fun forceComplete(player: Player) {
-        finishQuest(player)
+        finishGoal(player)
     }
 
     override fun getDescriptionText(player: Player): String {

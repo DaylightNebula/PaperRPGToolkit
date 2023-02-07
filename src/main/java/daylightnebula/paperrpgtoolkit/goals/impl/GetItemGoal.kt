@@ -46,7 +46,7 @@ class GetItemGoal(private val targetItem: ItemStack, private val minCount: Int):
 
             // if new count exceeds the count, remove the player from the count map and finish the quest
             if (newCount >= minCount)
-                finishQuest(player)
+                finishGoal(player)
             // otherwise, update tracker
             else {
                 // update tracker

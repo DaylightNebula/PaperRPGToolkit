@@ -3,6 +3,8 @@ package daylightnebula.paperrpgtoolkit.quests
 import daylightnebula.paperrpgtoolkit.TestStuff
 import daylightnebula.paperrpgtoolkit.item
 import daylightnebula.paperrpgtoolkit.goals.impl.GetItemGoal
+import daylightnebula.paperrpgtoolkit.goals.impl.PressShiftGoal
+import daylightnebula.paperrpgtoolkit.goals.impl.SelectNumberedOptionGoal
 import org.bukkit.Material
 import org.bukkit.entity.Player
 
@@ -13,6 +15,18 @@ class TestQuestChain: QuestChain(
 ) {
     override fun setupLinks(): Array<QuestLink> {
         return arrayOf(
+            QuestLink(
+                this,
+                "Test Quest Press Number",
+                "Press a number 1-8",
+                SelectNumberedOptionGoal()
+            ) { it.sendMessage("Finished the test quest press number with number ${it.inventory.heldItemSlot + 1}") },
+            QuestLink(
+                this,
+                "Test Quest Press Shift",
+                "Press shift",
+                PressShiftGoal()
+            ){ it.sendMessage("Finished the test quest press shift") },
             QuestLink(
                 this,
                 "Test Quest Get Custom Item",

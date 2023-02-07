@@ -25,7 +25,7 @@ class GotoLocationGoal(private val location: Vector, private val maxActivateDist
 
         // if player is within the activation distance of the location, end the quest
         if (event.player.location.toVector().distance(location) < maxActivateDistance)
-            finishQuest(event.player)
+            finishGoal(event.player)
         // otherwise, update the scoreboard
         else
             descriptionChanged(event.player)

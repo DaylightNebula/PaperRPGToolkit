@@ -14,7 +14,7 @@ abstract class Goal(
         return goalInterface ?: throw UninitializedPropertyAccessException("Goal $this was never initialized")
     }
 
-    fun finishQuest(player: Player) {
+    fun finishGoal(player: Player) {
         goalInterface?.goalComplete(player, this) ?: throw UninitializedPropertyAccessException("Goal $this was never initialized")
     }
 
