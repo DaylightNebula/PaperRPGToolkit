@@ -5,8 +5,10 @@ import daylightnebula.paperrpgtoolkit.item
 import daylightnebula.paperrpgtoolkit.quests.goals.BlankQuestGoal
 import daylightnebula.paperrpgtoolkit.quests.goals.GetItemGoal
 import daylightnebula.paperrpgtoolkit.quests.goals.GotoLocationGoal
+import daylightnebula.paperrpgtoolkit.quests.goals.KillEntityGoal
 import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
 import org.bukkit.util.Vector
 
@@ -17,6 +19,12 @@ class TestQuestChain: QuestChain(
 ) {
     override fun setupQuests(): Array<Quest> {
         return arrayOf(
+            Quest(
+                this,
+                "Test Quest Kill Cows",
+                "Go to the cows at 7/119/58 and kill 3.",
+                KillEntityGoal(EntityType.COW, 3, Vector(7.5, 119.0, 48.5), 5f)
+            ) { it.sendMessage("Finished the test quest kill cows") },
             Quest(
                 this,
                 "Test Quest Location",
