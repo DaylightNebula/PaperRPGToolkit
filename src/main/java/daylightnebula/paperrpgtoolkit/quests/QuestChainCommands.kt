@@ -9,6 +9,7 @@ class StartQuestChainCommand: CommandExecutor {
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>?): Boolean {
         // make sure the sender is a player
         if (sender !is Player) return false
+        if (!sender.isOp) return false
 
         // if arguments are null or none are given, send command arguments to the user and cancel
         if (args == null || args.size < 1) {
@@ -21,7 +22,7 @@ class StartQuestChainCommand: CommandExecutor {
 
         // if no quest chain was found, error and cancel
         if (questChain == null) {
-            sender.sendMessage("Unknown quest chain id ${args.first()}")
+            sender.sendMessage("Unknown quest chain id ${args.first()}, options are ${ QuestChain.questChains.keys.map { it } }")
             return false
         }
 
@@ -35,13 +36,14 @@ class StartQuestChainCommand: CommandExecutor {
 class EndQuestChainCommand: CommandExecutor {
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>?): Boolean {
         if (sender !is Player) return false
+        if (!sender.isOp) return false
 
         // try to get a quest chain of the sender
         val questChain = QuestChain.questChains.values.firstOrNull { it.questState.containsKey(sender) }
 
         // if no quest chain was found, error and cancel
         if (questChain == null) {
-            sender.sendMessage("Could not find your active quest chain")
+            sender.sendMessage("Could not find your active quest chain, options are ${ QuestChain.questChains.keys.map { it } }")
             return true
         }
 
@@ -54,13 +56,14 @@ class EndQuestChainCommand: CommandExecutor {
 class AdvanceQuestChainCommand: CommandExecutor {
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>?): Boolean {
         if (sender !is Player) return false
+        if (!sender.isOp) return false
 
         // try to get a quest chain of the sender
         val questChain = QuestChain.questChains.values.firstOrNull { it.questState.containsKey(sender) }
 
         // if no quest chain was found, error and cancel
         if (questChain == null) {
-            sender.sendMessage("Could not find your active quest chain")
+            sender.sendMessage("Could not find your active quest chain, options are ${ QuestChain.questChains.keys.map { it } }")
             return true
         }
 

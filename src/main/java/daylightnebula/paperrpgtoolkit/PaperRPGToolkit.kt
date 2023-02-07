@@ -16,17 +16,24 @@ class PaperRPGToolkit : JavaPlugin() {
 
     companion object {
         const val testsEnabled = true
+        lateinit var plugin: JavaPlugin
         lateinit var customItemReferenceIDKey: NamespacedKey
     }
 
     override fun onEnable() {
+        // save plugin
+        plugin = this
+
         // set up the name spaced keys that we need for storing information in minecraft objects
         customItemReferenceIDKey = NamespacedKey(this, "customItemReferenceID")
 
+        // register events
         Bukkit.getPluginManager().registerEvents(EventListener(), this)
 
+        // commands
         registerCommands()
 
+        // if tests are enabled, init them
         if (testsEnabled) TestStuff.init()
     }
 

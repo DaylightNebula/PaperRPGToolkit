@@ -17,5 +17,6 @@ class Quest(
 
     fun goalComplete(player: Player) {
         onQuestComplete(player)
+        chain.proceedToNextQuest(player)
     }
 }

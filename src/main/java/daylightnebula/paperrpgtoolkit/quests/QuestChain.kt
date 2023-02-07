@@ -8,17 +8,16 @@ import org.bukkit.util.ChatPaginator
 import java.lang.NullPointerException
 
 abstract class QuestChain(
+    val id: String,
     val name: String,
     val description: String
 ) {
     companion object {
         val questChains = hashMapOf<String, QuestChain>()
+        val curQuest = hashMapOf<Player, String>()
     }
 
     val quests = setupQuests()
-
-    // create an id by remove spacing from the given name
-    val id = name.replace(" ", "")
 
     // tracks which
     val questState = hashMapOf<Player, Int>()
@@ -38,7 +37,7 @@ abstract class QuestChain(
         val quest = quests[questState[player]!!]
 
         // paginate the quest description so that it fits in the sidebar
-        val descriptionLines = ChatPaginator.wordWrap("§7${quest.description}", 16)
+        val descriptionLines = ChatPaginator.wordWrap("§f${quest.description}", 16)
 
         // render the sidebar
         val lines = listOf(
@@ -53,6 +52,7 @@ abstract class QuestChain(
     fun startForPlayer(player: Player) {
         // add the given player to the quest state tracking map
         questState[player] = 0
+        curQuest[player] = id
         updateSidebarForPlayer(player)
     }
 
@@ -73,6 +73,10 @@ abstract class QuestChain(
     fun endForPlayer(player: Player, reward: Boolean) {
         // remove the given player from the quest state tracking map
         questState.remove(player)
+
+        // remove from quest chain tracker
+        if (curQuest[player] == id)
+            curQuest.remove(player)
 
         // if the player should be rewarded, call on complete
         if (reward)

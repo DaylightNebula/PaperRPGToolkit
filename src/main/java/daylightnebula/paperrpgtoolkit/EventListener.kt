@@ -18,7 +18,7 @@ class EventListener : Listener {
         handleCustomItemInteractEvent(event)
     }
 
-    fun handleCustomItemInteractEvent(event: PlayerInteractEvent) {
+    private fun handleCustomItemInteractEvent(event: PlayerInteractEvent) {
         // get item used
         val item = event.item
 
@@ -34,6 +34,5 @@ class EventListener : Listener {
 
     @EventHandler
     fun onInventoryInteract(event: EntityPickupItemEvent) {
-        Bukkit.broadcastMessage("Pickup item")
     }
 }

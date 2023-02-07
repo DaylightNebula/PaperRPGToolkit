@@ -1,5 +1,6 @@
 package daylightnebula.paperrpgtoolkit.items
 
+import daylightnebula.paperrpgtoolkit.addItemWithEvent
 import daylightnebula.paperrpgtoolkit.item
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -47,6 +48,6 @@ abstract class CustomItem(
 
     fun giveToPlayer(player: Player, amount: Int) {
         // TODO make better
-        player.inventory.addItem(itemStack)
+        player.inventory.addItemWithEvent(itemStack)
     }
 }

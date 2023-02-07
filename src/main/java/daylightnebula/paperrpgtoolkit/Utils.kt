@@ -5,12 +5,16 @@ import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeModifier
+import org.bukkit.entity.Item
+import org.bukkit.event.entity.EntityPickupItemEvent
+import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.scoreboard.Criteria
 import org.bukkit.scoreboard.DisplaySlot
 import org.bukkit.scoreboard.Scoreboard
 import org.bukkit.util.ChatPaginator
+import java.util.HashMap
 
 
 fun item(
@@ -36,13 +40,13 @@ fun item(
     }
 
     // if this function was given a name
-    if (name.length > 0) {
+    if (name.isNotEmpty()) {
         // set item metadata's display name to a component version of the given name
         meta.displayName(Component.text(name))
     }
 
     // if this function was given a description
-    if (description.length > 0) {
+    if (description.isNotEmpty()) {
         // paginate the given description so it is not too big
         val lorePages = ChatPaginator.paginate(description, 20).lines
 
@@ -95,4 +99,16 @@ fun buildScoreboard(title: String, lines: List<String>): Scoreboard {
     }
 
     return scoreboard
+}
+
+fun Inventory.addItemWithEvent(vararg items: ItemStack) {
+    val loc = this.location
+    if (loc == null) {
+        this.addItem(*items)
+        return
+    }
+
+    items.forEach {
+        Bukkit.getWorlds().first().dropItem(loc, items.first()) { item -> item.pickupDelay = 0 }
+    }
 }
