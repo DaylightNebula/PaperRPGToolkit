@@ -1,11 +1,15 @@
 package daylightnebula.paperrpgtoolkit
 
 import net.kyori.adventure.text.Component
+import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeModifier
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
+import org.bukkit.scoreboard.Criteria
+import org.bukkit.scoreboard.DisplaySlot
+import org.bukkit.scoreboard.Scoreboard
 import org.bukkit.util.ChatPaginator
 
 
@@ -75,4 +79,20 @@ fun item(
 
     // return the final item
     return item
+}
+
+fun buildScoreboard(title: String, lines: List<String>): Scoreboard {
+    // build a new scoreboard
+    val scoreboard = Bukkit.getScoreboardManager().newScoreboard
+
+    // create a new objective in the scoreboard that outputs to the sidebar
+    val obj = scoreboard.registerNewObjective("sidebar", Criteria.DUMMY, Component.text(title))
+    obj.displaySlot = DisplaySlot.SIDEBAR
+
+    // for each line, add it to the objective with a score of 0
+    lines.forEachIndexed { index, line ->
+        obj.getScore(line).score = lines.size - index
+    }
+
+    return scoreboard
 }

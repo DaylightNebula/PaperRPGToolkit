@@ -9,3 +9,12 @@ commands:
   getcustomitem:
     description: Get custom item
     usage: /getcustomitem <name or id> [amount]
+  startquestchain:
+    description: Start a quest chain for the sender
+    usage: /startquestchain <quest chain id>
+  endquestchain:
+    description: End the senders current quest chain
+    usage: /endquestchain
+  advancequestchain:
+    description: Advance the senders current quest chain
+    usage: /advancequestchain

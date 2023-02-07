@@ -5,16 +5,19 @@
    - [x] Left and right click detection (with limits on both (1/2 second))
    - [x] Name and description fields that convert to components
  - [ ] Quest Chains
-   - [ ] Start and force end quest command
-   - [ ] Current quest shows up in the sidebar
+   - [x] Start and force end quest command
+   - [x] Current quest shows up in the sidebar
    - [ ] Quests goals:
      - [ ] Collect item (with number)
+     - [ ] Collect custom item
      - [ ] Go to location (with acceptable radius)
      - [ ] Kill number of entities (optional location and radius to get the kills)
  - [ ] Custom NPCs
    - [ ] Spawn NPC command
    - [ ] Click detection
    - [ ] Quest goal: Give item to NPC (click NPC with item) (optional remove item)
+   - [ ] Quest goal: Talk to NPC
+   - [ ] Give quests after talking to NPC
    - [ ] Dialogue option
  - [ ] Custom Resource Pack
    - [ ] Generate item models from .bbmodel files or just textures
