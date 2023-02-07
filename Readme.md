@@ -15,7 +15,7 @@
  - [ ] NPCs
    - [x] Spawn NPC command
    - [x] Remove NPC command
-   - [ ] Click detection
+   - [x] Right click detection
    - [ ] Quest goal: Give item to NPC (click NPC with item) (optional remove item)
    - [ ] Quest goal: Talk to NPC
    - [ ] Give quests after talking to NPC
@@ -27,10 +27,6 @@
        - [x] Convert quest goals to general purpose goals
        - [x] Press shift goal
        - [x] Press hot bar number and switch dialogue chain
- - [ ] JSON-ify Stuffs
-   - [ ] Custom Items
-   - [ ] Quests
-   - [ ] NPCs
  - [ ] Custom Resource Pack
    - [ ] Generate item models from .bbmodel files or just textures
    - [ ] Add custom model support for items

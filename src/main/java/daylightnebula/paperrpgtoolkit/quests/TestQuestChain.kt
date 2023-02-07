@@ -1,6 +1,7 @@
 package daylightnebula.paperrpgtoolkit.quests
 
 import daylightnebula.paperrpgtoolkit.TestStuff
+import daylightnebula.paperrpgtoolkit.goals.impl.ClickNPCWithItemGoal
 import daylightnebula.paperrpgtoolkit.item
 import daylightnebula.paperrpgtoolkit.goals.impl.GetItemGoal
 import daylightnebula.paperrpgtoolkit.goals.impl.PressShiftGoal
@@ -15,6 +16,12 @@ class TestQuestChain: QuestChain(
 ) {
     override fun setupLinks(): Array<QuestLink> {
         return arrayOf(
+            QuestLink(
+                this,
+                "Test Give Item To Bob",
+                "Give bob 5 apples",
+                ClickNPCWithItemGoal(TestStuff.testNPC, item(Material.APPLE), 5, true)
+            ) { it.sendMessage("Finished the test quest give item to bob") },
             QuestLink(
                 this,
                 "Test Quest Press Number",

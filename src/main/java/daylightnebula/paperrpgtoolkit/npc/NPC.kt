@@ -5,6 +5,7 @@ import org.bukkit.Location
 import org.bukkit.entity.Entity
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.LivingEntity
+import org.bukkit.event.player.PlayerInteractEntityEvent
 import kotlin.math.pow
 
 abstract class NPC(
@@ -69,10 +70,10 @@ abstract class NPC(
         return entity
     }
 
-    fun onClickEntity() {
-        onClickEntity0()
+    fun onRightClick(event: PlayerInteractEntityEvent) {
+        onRightClick0(event)
     }
 
     abstract fun onCreateNewEntity(entity: Entity)
-    abstract fun onClickEntity0()
+    abstract fun onRightClick0(event: PlayerInteractEntityEvent)
 }

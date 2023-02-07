@@ -7,11 +7,12 @@ import daylightnebula.paperrpgtoolkit.quests.TestQuestChain
 object TestStuff {
 
     lateinit var testSword: TestSwordItem
+    lateinit var testNPC: TestNPC
 
     fun init() {
         // create test custom item
         testSword = TestSwordItem()
+        testNPC = TestNPC()
         TestQuestChain()
-        TestNPC()
     }
 }

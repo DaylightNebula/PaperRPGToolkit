@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextColor
 import org.bukkit.entity.Entity
 import org.bukkit.entity.EntityType
+import org.bukkit.event.player.PlayerInteractEntityEvent
 
 class TestNPC: NPC(
     "testnpc",
@@ -11,5 +12,5 @@ class TestNPC: NPC(
     EntityType.VILLAGER
 ) {
     override fun onCreateNewEntity(entity: Entity) {}
-    override fun onClickEntity0() { println("Click detected") }
+    override fun onRightClick0(event: PlayerInteractEntityEvent) { println("Click detected") }
 }

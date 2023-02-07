@@ -1,20 +1,17 @@
 package daylightnebula.paperrpgtoolkit
 
+import daylightnebula.paperrpgtoolkit.goals.impl.ClickNPCWithItemGoal
 import daylightnebula.paperrpgtoolkit.items.CustomItem
-import org.bukkit.Bukkit
+import daylightnebula.paperrpgtoolkit.npc.NPC
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
-import org.bukkit.event.entity.EntityPickupItemEvent
-import org.bukkit.event.inventory.InventoryInteractEvent
-import org.bukkit.event.inventory.InventoryMoveItemEvent
-import org.bukkit.event.inventory.InventoryPickupItemEvent
-import org.bukkit.event.player.PlayerAttemptPickupItemEvent
+import org.bukkit.event.player.PlayerInteractEntityEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.persistence.PersistentDataType
 
 class EventListener : Listener {
     @EventHandler
-    public fun onPlayerInteract(event: PlayerInteractEvent) {
+    fun onPlayerInteract(event: PlayerInteractEvent) {
         handleCustomItemInteractEvent(event)
     }
 
@@ -33,6 +30,27 @@ class EventListener : Listener {
     }
 
     @EventHandler
-    fun onInventoryInteract(event: EntityPickupItemEvent) {
+    fun onPlayerInteractEntity(event: PlayerInteractEntityEvent) {
+        // get player
+        val player = event.player
+
+        // get target entity
+        val target = event.rightClicked
+
+        // check if target entity is an NPC
+        val npc = NPC.activeNPCs[target] ?: return
+
+        // cancel the event
+        event.isCancelled = true
+
+        // check if this player has an active ClickNPCWithItemGoal
+        val goal = ClickNPCWithItemGoal.activePlayers[player]
+
+        // if we found a goal, and it passed the goals interact test, stop here
+        if (goal != null && goal.interact(player, npc, player.inventory.itemInMainHand))
+            return
+
+        // call click
+        npc.onRightClick(event)
     }
 }
