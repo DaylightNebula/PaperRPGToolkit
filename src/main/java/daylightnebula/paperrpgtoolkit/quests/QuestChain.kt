@@ -37,7 +37,7 @@ abstract class QuestChain(
         val quest = quests[questState[player]!!]
 
         // paginate the quest description so that it fits in the sidebar
-        val descriptionLines = ChatPaginator.wordWrap("§f${quest.description}", 16)
+        val descriptionLines = ChatPaginator.wordWrap("§f${quest.description}", if (quest.name.length > 16) quest.name.length else 16)
 
         // render the sidebar
         val lines = listOf(

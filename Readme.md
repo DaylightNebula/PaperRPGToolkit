@@ -10,7 +10,7 @@
    - [ ] Quests goals:
      - [x] Collect item (with number)
      - [x] Collect custom item
-     - [ ] Go to location (with acceptable radius)
+     - [x] Go to location (with acceptable radius)
      - [ ] Kill number of entities (optional location and radius to get the kills)
  - [ ] Custom NPCs
    - [ ] Spawn NPC command

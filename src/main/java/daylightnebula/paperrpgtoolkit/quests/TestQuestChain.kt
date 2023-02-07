@@ -4,8 +4,11 @@ import daylightnebula.paperrpgtoolkit.TestStuff
 import daylightnebula.paperrpgtoolkit.item
 import daylightnebula.paperrpgtoolkit.quests.goals.BlankQuestGoal
 import daylightnebula.paperrpgtoolkit.quests.goals.GetItemGoal
+import daylightnebula.paperrpgtoolkit.quests.goals.GotoLocationGoal
+import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.entity.Player
+import org.bukkit.util.Vector
 
 class TestQuestChain: QuestChain(
     "testchain",
@@ -16,16 +19,22 @@ class TestQuestChain: QuestChain(
         return arrayOf(
             Quest(
                 this,
-                "Test Quest A",
-                "First Test Quest.  Get the test sword.",
-                GetItemGoal(TestStuff.testSword.itemStack, 1)
-            ) { it.sendMessage("Finished the first test quest") },
+                "Test Quest Location",
+                "Go to 0/122/52",
+                GotoLocationGoal(Vector(0.5, 122.0, 52.5), 1f)
+            ) { it.sendMessage("Finished the test quest location") },
             Quest(
                 this,
-                "Test Quest B",
-                "Second Test Quest. Get 10 apples.",
+                "Test Quest Get Custom Item",
+                "Get the test sword.",
+                GetItemGoal(TestStuff.testSword.itemStack, 1)
+            ) { it.sendMessage("Finished the test quest get custom item") },
+            Quest(
+                this,
+                "Test Quest Get MC Item",
+                "Get 10 apples.",
                 GetItemGoal(item(Material.APPLE), 10)
-            ) { it.sendMessage("Finished the second test quest") }
+            ) { it.sendMessage("Finished the test quest get mc item") }
         )
     }
 
