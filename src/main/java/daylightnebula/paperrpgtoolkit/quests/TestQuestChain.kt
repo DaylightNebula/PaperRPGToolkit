@@ -14,8 +14,18 @@ class TestQuestChain: QuestChain(
 ) {
     override fun setupQuests(): Array<Quest> {
         return arrayOf(
-            Quest(this, "Test Quest A", "First Test Quest.  Get the test sword.", GetItemGoal(TestStuff.testSword.itemStack, 1)) { it.sendMessage("Finished the first test quest") },
-            Quest(this, "Test Quest B", "Second Test Quest. Get 10 apples.", GetItemGoal(item(Material.APPLE), 10)) { it.sendMessage("Finished the second test quest") }
+            Quest(
+                this,
+                "Test Quest A",
+                "First Test Quest.  Get the test sword.",
+                GetItemGoal(TestStuff.testSword.itemStack, 1)
+            ) { it.sendMessage("Finished the first test quest") },
+            Quest(
+                this,
+                "Test Quest B",
+                "Second Test Quest. Get 10 apples.",
+                GetItemGoal(item(Material.APPLE), 10)
+            ) { it.sendMessage("Finished the second test quest") }
         )
     }
 

@@ -42,7 +42,8 @@ abstract class QuestChain(
         // render the sidebar
         val lines = listOf(
             "§6§l${quest.name}",
-            *descriptionLines
+            *descriptionLines,
+            quest.goal.getDescriptionText(player)
         )
 
         // send to player

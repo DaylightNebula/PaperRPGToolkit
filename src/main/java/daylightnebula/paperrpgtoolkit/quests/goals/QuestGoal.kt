@@ -18,4 +18,5 @@ abstract class QuestGoal(
     }
 
     abstract fun forceComplete(player: Player)
+    abstract fun getDescriptionText(player: Player): String
 }

@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 import java.util.*
 
-class GetItemGoal(private val targetItem: ItemStack, private val count: Int): QuestGoal(), Listener {
+class GetItemGoal(private val targetItem: ItemStack, private val minCount: Int): QuestGoal(), Listener {
     private val isCustom = targetItem.itemMeta.persistentDataContainer.has(PaperRPGToolkit.customItemReferenceIDKey)
     private val itemName = if (isCustom) targetItem.itemMeta.persistentDataContainer.get(PaperRPGToolkit.customItemReferenceIDKey, PersistentDataType.STRING) else ""
 
@@ -36,7 +36,7 @@ class GetItemGoal(private val targetItem: ItemStack, private val count: Int): Qu
                 item.itemMeta.persistentDataContainer.has(PaperRPGToolkit.customItemReferenceIDKey) && item.itemMeta.persistentDataContainer.get(PaperRPGToolkit.customItemReferenceIDKey, PersistentDataType.STRING) == itemName
             // otherwise, check if material and name are equal
             else
-                item.type == targetItem.type && item.displayName() == targetItem.displayName()
+                item.type == targetItem.type
 
         // if item is valid, update count and check if complete
         if (valid) {
@@ -44,7 +44,7 @@ class GetItemGoal(private val targetItem: ItemStack, private val count: Int): Qu
             val newCount = (countMap[player.uniqueId] ?: 0) + numAdded
 
             // if new count exceeds the count, remove the player from the count map and finish the quest
-            if (newCount >= count) {
+            if (newCount >= minCount) {
                 countMap.remove(player.uniqueId)
                 finishQuest(player)
             }
@@ -52,11 +52,17 @@ class GetItemGoal(private val targetItem: ItemStack, private val count: Int): Qu
             else {
                 // update tracker
                 countMap[player.uniqueId] = newCount
+                quest?.chain?.updateSidebarForPlayer(player)
             }
         }
     }
 
     override fun forceComplete(player: Player) {
-        player.inventory.addItemWithEvent(targetItem.clone().apply { amount = count })
+        player.inventory.addItemWithEvent(targetItem.clone().apply { amount = minCount })
+    }
+
+    override fun getDescriptionText(player: Player): String {
+        val curCount = countMap[player.uniqueId] ?: return "0/$minCount"
+        return "$curCount/$minCount"
     }
 }

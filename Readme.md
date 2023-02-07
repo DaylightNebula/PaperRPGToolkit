@@ -8,8 +8,8 @@
    - [x] Start and force end quest command
    - [x] Current quest shows up in the sidebar
    - [ ] Quests goals:
-     - [ ] Collect item (with number)
-     - [ ] Collect custom item
+     - [x] Collect item (with number)
+     - [x] Collect custom item
      - [ ] Go to location (with acceptable radius)
      - [ ] Kill number of entities (optional location and radius to get the kills)
  - [ ] Custom NPCs
