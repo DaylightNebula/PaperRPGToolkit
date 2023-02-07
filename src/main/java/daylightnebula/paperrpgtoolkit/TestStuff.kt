@@ -1,6 +1,7 @@
 package daylightnebula.paperrpgtoolkit
 
 import daylightnebula.paperrpgtoolkit.items.TestSwordItem
+import daylightnebula.paperrpgtoolkit.npc.TestNPC
 import daylightnebula.paperrpgtoolkit.quests.TestQuestChain
 
 object TestStuff {
@@ -11,5 +12,6 @@ object TestStuff {
         // create test custom item
         testSword = TestSwordItem()
         TestQuestChain()
+        TestNPC()
     }
 }

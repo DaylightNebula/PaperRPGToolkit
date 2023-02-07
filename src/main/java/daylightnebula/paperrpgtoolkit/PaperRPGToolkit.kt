@@ -3,6 +3,9 @@ package daylightnebula.paperrpgtoolkit
 import daylightnebula.paperrpgtoolkit.items.CustomItem
 import daylightnebula.paperrpgtoolkit.items.CustomItemCommand
 import daylightnebula.paperrpgtoolkit.items.TestSwordItem
+import daylightnebula.paperrpgtoolkit.npc.NPC
+import daylightnebula.paperrpgtoolkit.npc.RemoveNearbyNPCCommand
+import daylightnebula.paperrpgtoolkit.npc.SpawnNPCCommand
 import daylightnebula.paperrpgtoolkit.quests.AdvanceQuestChainCommand
 import daylightnebula.paperrpgtoolkit.quests.EndQuestChainCommand
 import daylightnebula.paperrpgtoolkit.quests.StartQuestChainCommand
@@ -42,8 +45,11 @@ class PaperRPGToolkit : JavaPlugin() {
         this.getCommand("startquestchain")?.setExecutor(StartQuestChainCommand())
         this.getCommand("endquestchain")?.setExecutor(EndQuestChainCommand())
         this.getCommand("advancequestchain")?.setExecutor(AdvanceQuestChainCommand())
+        this.getCommand("spawnnpc")?.setExecutor(SpawnNPCCommand())
+        this.getCommand("removenearbynpcs")?.setExecutor(RemoveNearbyNPCCommand())
     }
 
     override fun onDisable() {
+        NPC.removeAllNPCs()
     }
 }
