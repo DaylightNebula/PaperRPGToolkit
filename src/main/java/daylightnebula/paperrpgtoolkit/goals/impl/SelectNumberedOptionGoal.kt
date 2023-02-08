@@ -10,7 +10,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerItemHeldEvent
 import java.util.UUID
 
-class SelectNumberedOptionGoal: Listener, Goal() {
+class SelectNumberedOptionGoal(val min: Int, val max: Int): Listener, Goal() {
 
     private val prevSlots = hashMapOf<UUID, Int>()
 
@@ -22,6 +22,12 @@ class SelectNumberedOptionGoal: Listener, Goal() {
     fun onPlayerItemHeld(event: PlayerItemHeldEvent) {
         // ignore this event if the player is not an active player or the slot chosen is the last one
         if (!prevSlots.containsKey(event.player.uniqueId) || event.newSlot == 8) return
+
+        // check if the new slot if valid, if it is not, reset and cancel
+        if (event.newSlot < min || event.newSlot > max) {
+            event.player.inventory.heldItemSlot = 8
+            return
+        }
 
         // after 1 tick, set back to previous slot
         val oldSlot = prevSlots[event.player.uniqueId]!!

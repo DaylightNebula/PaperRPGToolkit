@@ -5,14 +5,15 @@ import daylightnebula.paperrpgtoolkit.goals.Goal
 import org.bukkit.entity.Player
 
 class QuestLink(
-    private val chain: QuestChain,
     val name: String,
     val description: String,
     val goal: Goal,
-    val onQuestComplete: (player: Player) -> Unit
+    val onGoalComplete: (player: Player) -> Unit = {}
 ): GoalInterface {
 
-    init {
+    lateinit var chain: QuestChain
+    fun init(chain: QuestChain) {
+        this.chain = chain
         goal.init(this)
     }
 
@@ -20,7 +21,7 @@ class QuestLink(
     fun stopForPlayer(player: Player) { goal.stopForPlayer(player) }
 
     override fun goalComplete(player: Player, goal: Goal) {
-        onQuestComplete(player)
+        onGoalComplete(player)
         chain.proceedToNextQuest(player)
     }
 

@@ -2,26 +2,30 @@ package daylightnebula.paperrpgtoolkit.quests
 
 import daylightnebula.paperrpgtoolkit.buildScoreboard
 import org.bukkit.Bukkit
+import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.util.ChatPaginator
 
-abstract class QuestChain(
+class QuestChain(
     val id: String,
     val name: String,
-    val description: String
+    val description: String,
+    val links: Array<QuestLink>,
+
+    // callbacks
+    val onComplete: (player: Player) -> Unit = {},
 ) {
     companion object {
         val questChains = hashMapOf<String, QuestChain>()
         val curQuest = hashMapOf<Player, String>()
     }
 
-    val links = setupLinks()
-
     // tracks which
     val linkTracker = hashMapOf<Player, Int>()
 
     init {
         questChains[id] = this
+        links.forEach { it.init(this) }
     }
 
     fun updateSidebarForPlayer(player: Player) {
@@ -54,6 +58,10 @@ abstract class QuestChain(
         linkTracker[player] = 0
         curQuest[player] = id
         updateSidebarForPlayer(player)
+
+        // notify player that the quest started
+        player.sendTitle("" , "§6Started quest: §a§l$name", 10, 50, 10)
+        player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f)
     }
 
     fun proceedToNextQuest(player: Player) {
@@ -86,10 +94,11 @@ abstract class QuestChain(
 
         // if the player should be rewarded, call on complete
         if (reward)
-            onQuestChainComplete(player)
+            onComplete(player)
         updateSidebarForPlayer(player)
-    }
 
-    abstract fun setupLinks(): Array<QuestLink>
-    abstract fun onQuestChainComplete(player: Player)
+        // notify player that the quest started
+        player.sendTitle("" , "§6Completed quest: §a§l$name", 10, 50, 10)
+        player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f)
+    }
 }

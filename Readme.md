@@ -12,16 +12,16 @@
      - [x] Collect custom item
      - [x] Go to location (with acceptable radius)
      - [x] Kill number of entities (optional location and radius to get the kills)
- - [ ] NPCs
+ - [x] NPCs
    - [x] Spawn NPC command
    - [x] Remove NPC command
    - [x] Right click detection
    - [x] Goal: Give item to NPC (click NPC with item) (optional remove item)
-   - [ ] Goal: Finish dialogue (talk to NPC goal, idea is that it is better to finish the goal after the dialogue is done)
-   - [ ] Dialogue
-     - [ ] Dialogue chains
-     - [ ] Lock player into chat
-       - [ ] Disable standard chat for the player while they are in the dialogue
+   - [x] Goal: Finish dialogue (talk to NPC goal, idea is that it is better to finish the goal after the dialogue is done)
+   - [x] Dialogue
+     - [x] Dialogue chains
+     - [x] Lock player into chat
+       - [x] Disable standard chat for the player while they are in the dialogue
      - [x] Dialogue goals
        - [x] Convert quest goals to general purpose goals
        - [x] Press shift goal

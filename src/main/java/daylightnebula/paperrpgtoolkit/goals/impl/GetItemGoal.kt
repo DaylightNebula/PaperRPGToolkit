@@ -39,6 +39,8 @@ class GetItemGoal(private val targetItem: ItemStack, private val minCount: Int):
             else
                 item.type == targetItem.type
 
+        println("Received item pickup $valid")
+
         // if item is valid, update count and check if complete
         if (valid) {
             // get new count for this player

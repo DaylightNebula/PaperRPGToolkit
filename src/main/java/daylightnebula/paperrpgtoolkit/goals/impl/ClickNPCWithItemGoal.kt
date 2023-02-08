@@ -69,6 +69,6 @@ class ClickNPCWithItemGoal(
     }
 
     override fun getDescriptionText(player: Player): String {
-        return "0/$amount"
+        return ""
     }
 }

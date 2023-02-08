@@ -1,18 +1,14 @@
 package daylightnebula.paperrpgtoolkit
 
 import daylightnebula.paperrpgtoolkit.dialogue.DialogueChain
-import daylightnebula.paperrpgtoolkit.items.CustomItem
 import daylightnebula.paperrpgtoolkit.items.CustomItemCommand
-import daylightnebula.paperrpgtoolkit.items.TestSwordItem
 import daylightnebula.paperrpgtoolkit.npc.NPC
 import daylightnebula.paperrpgtoolkit.npc.RemoveNearbyNPCCommand
 import daylightnebula.paperrpgtoolkit.npc.SpawnNPCCommand
 import daylightnebula.paperrpgtoolkit.quests.AdvanceQuestChainCommand
 import daylightnebula.paperrpgtoolkit.quests.EndQuestChainCommand
 import daylightnebula.paperrpgtoolkit.quests.StartQuestChainCommand
-import daylightnebula.paperrpgtoolkit.quests.TestQuestChain
 import org.bukkit.Bukkit
-import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.plugin.java.JavaPlugin
 

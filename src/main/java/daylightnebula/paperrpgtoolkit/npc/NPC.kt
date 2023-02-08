@@ -5,13 +5,16 @@ import org.bukkit.Location
 import org.bukkit.entity.Entity
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.LivingEntity
+import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerInteractEntityEvent
 import kotlin.math.pow
 
-abstract class NPC(
+class NPC(
     id: String,
     val name: String?,
-    private val entityType: EntityType
+    private val entityType: EntityType,
+    private val onCreateNew: (entity: Entity) -> Unit = {},
+    private val onPlayerInteract: (player: Player) -> Unit = {}
 ) {
 
     companion object {
@@ -59,6 +62,9 @@ abstract class NPC(
             entity.isCustomNameVisible = true
         }
 
+        // call create new callback
+        onCreateNew(entity)
+
         // save to active npc list
         entities.add(entity)
 
@@ -67,7 +73,7 @@ abstract class NPC(
     }
 
     fun onRightClick(event: PlayerInteractEntityEvent) {
-        onRightClick0(event)
+        onPlayerInteract(event.player)
     }
 
     fun removeEntities(toRemove: List<Entity>) {
@@ -75,7 +81,4 @@ abstract class NPC(
         toRemove.forEach { it.remove() }
         entities.removeAll(toRemove.toSet())
     }
-
-    abstract fun onCreateNewEntity(entity: Entity)
-    abstract fun onRightClick0(event: PlayerInteractEntityEvent)
 }

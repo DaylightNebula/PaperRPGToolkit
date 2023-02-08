@@ -18,7 +18,7 @@ import java.awt.Component
 
 class DialogueChain(
     val links: Array<DialogueLink>,
-    val onComplete: (player: Player) -> Unit
+    val onComplete: (player: Player) -> Unit = {}
 ) {
 
     companion object {
@@ -81,13 +81,22 @@ class DialogueChain(
     }
 
     fun endForPlayer(player: Player) {
+        // call event
+        Bukkit.getPluginManager().callEvent(DialogueFinishEvent(player, this))
+
         // remove the given player from the quest state tracking map
         linkCounter.remove(player)
 
         // if the player should be rewarded, call on complete
         onComplete(player)
 
+        // remove from occupied list
         occupiedList.remove(player)
+
+        // clear chat
+        repeat(maxLines) {
+            player.sendMessage("")
+        }
     }
 
     val maxLines = 10
