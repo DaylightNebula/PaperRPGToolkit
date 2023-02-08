@@ -81,22 +81,20 @@ class DialogueChain(
     }
 
     fun endForPlayer(player: Player) {
-        // call event
+        // clear chat
+        for (i in 0 until maxLines) {
+            player.sendMessage("")
+        }
+
+        // call events
         Bukkit.getPluginManager().callEvent(DialogueFinishEvent(player, this))
+        onComplete(player)
 
         // remove the given player from the quest state tracking map
         linkCounter.remove(player)
 
-        // if the player should be rewarded, call on complete
-        onComplete(player)
-
         // remove from occupied list
         occupiedList.remove(player)
-
-        // clear chat
-        repeat(maxLines) {
-            player.sendMessage("")
-        }
     }
 
     val maxLines = 10

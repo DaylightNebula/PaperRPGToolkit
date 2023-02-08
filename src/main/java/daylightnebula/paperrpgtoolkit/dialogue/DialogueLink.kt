@@ -1,8 +1,10 @@
 package daylightnebula.paperrpgtoolkit.dialogue
 
+import daylightnebula.paperrpgtoolkit.PaperRPGToolkit
 import daylightnebula.paperrpgtoolkit.goals.Goal
 import daylightnebula.paperrpgtoolkit.goals.GoalInterface
 import daylightnebula.paperrpgtoolkit.npc.NPC
+import org.bukkit.Bukkit
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 
@@ -40,8 +42,8 @@ class DialogueLink(
     }
 
     override fun goalComplete(player: Player, goal: Goal) {
-        callback?.let { it(player, player.inventory.heldItemSlot) }
         chain.proceedToNextLink(player)
+        callback?.let { it(player, player.inventory.heldItemSlot) }
     }
 
     override fun descriptionChanged(player: Player, goal: Goal) {}
