@@ -91,7 +91,7 @@ class DialogueChain(
     }
 
     val maxLines = 10
-    val limitPerLine = 32
+    val limitPerLine = 70
     fun draw(player: Player, link: DialogueLink) {
         // get the lines for the message
         val linesForMessage = maxLines - (link.options?.size ?: 1)

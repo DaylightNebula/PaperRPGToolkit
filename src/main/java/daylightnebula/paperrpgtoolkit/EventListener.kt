@@ -1,10 +1,14 @@
 package daylightnebula.paperrpgtoolkit
 
+import daylightnebula.paperrpgtoolkit.dialogue.DialogueChain
 import daylightnebula.paperrpgtoolkit.goals.impl.ClickNPCWithItemGoal
 import daylightnebula.paperrpgtoolkit.items.CustomItem
 import daylightnebula.paperrpgtoolkit.npc.NPC
+import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.player.AsyncPlayerChatEvent
+import org.bukkit.event.player.PlayerChatEvent
 import org.bukkit.event.player.PlayerInteractEntityEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.persistence.PersistentDataType
@@ -52,5 +56,20 @@ class EventListener : Listener {
 
         // call click
         npc.onRightClick(event)
+    }
+
+    @EventHandler
+    fun onPlayerChat(event: AsyncPlayerChatEvent) {
+        // cancel the event first
+        event.isCancelled = true
+
+        // get the message
+        val message = "<${event.player.name}> ${event.message}"
+
+        // send it to all players who are not in a dialogue
+        Bukkit.getOnlinePlayers().forEach {
+            if (!DialogueChain.occupiedList.contains(it))
+                it.sendMessage(message)
+        }
     }
 }
