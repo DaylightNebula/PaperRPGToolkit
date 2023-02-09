@@ -26,13 +26,13 @@
        - [x] Convert quest goals to general purpose goals
        - [x] Press shift goal
        - [x] Press hot bar number and switch dialogue chain
- - [ ] Custom Mobs
+ - [x] Custom Mobs
    - [x] Entity Tasks
      - [x] Wander near point (average time between wander and well as spread) (take over when out of range option)
      - [x] Stay at point 
      - [x] Attack nearby players
    - [x] Spawn command
-   - [ ] Update "kill number of entities" goal to account for custom mobs accordingly
+   - [x] Update "kill number of entities" goal to account for custom mobs accordingly
  - [ ] Custom Mob Spawner
    - [ ] Maximum active
    - [ ] Minimum active
