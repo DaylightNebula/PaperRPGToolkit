@@ -64,6 +64,7 @@
    - [ ] Generate item models from .bbmodel files or just textures
    - [ ] Add custom model support for items
    - [ ] Add custom model support for NPCs
+   - [ ] Add custom model support for mobs
  - [ ] Custom Blocks
    - [ ] Get command
    - [ ] Custom models
