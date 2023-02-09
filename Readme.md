@@ -27,6 +27,10 @@
        - [x] Press shift goal
        - [x] Press hot bar number and switch dialogue chain
  - [ ] Custom Mobs
+   - [ ] Entity Goals
+     - [ ] Wander near point (if point given is null, default to spawn point) (average time between wander and well as spread) (take over when out of range option)
+     - [ ] Stay at point (if point given is null, default to spawn point)
+     - [ ] Attack nearby players
    - [ ] Spawn command
    - [ ] Spawner area
    - [ ] Custom models
