@@ -12,7 +12,7 @@ import kotlin.math.pow
 class CustomMob(
     val id: String,
     private val displayName: String,
-    private val type: EntityType,
+    private val supertype: EntityType,
 
     // stats
     private val maxHealth: Double? = null,
@@ -45,7 +45,7 @@ class CustomMob(
         }
     }
 
-    private val entities = hashMapOf<Mob, Int>() // Format: bukkit entity, current task index
+    val entities = hashMapOf<Mob, Pair<Location, Int>>() // Format: bukkit entity, current task index
 
     init {
         mobs.add(this)
@@ -53,7 +53,7 @@ class CustomMob(
 
     fun spawnEntityAtLocation(location: Location) {
         // spawn entity and make sure it is a mob
-        val entity = location.world.spawnEntity(location, type) as? Mob ?: return
+        val entity = location.world.spawnEntity(location, supertype) as? Mob ?: return
 
         // set flags
         entity.isPersistent = false
@@ -87,39 +87,41 @@ class CustomMob(
         onMobCreate(entity)
 
         // track the entity
-        entities[entity] = getTaskForEntity(entity)
+        entities[entity] = Pair(location, getTaskForEntity(entity))
         startCurrentTaskForEntity(entity)
     }
 
     private fun updateAllEntities() {
         // for each active entity
-        entities.forEach { (mob, curTaskIdx) ->
+        entities.forEach { (mob, pair) ->
+            val curTaskIdx = pair.second
+
             // check if its task has changed
             val taskID = getTaskForEntity(mob)
             if (taskID == curTaskIdx) {
                 // if task has not changed, update and cancel
-                tasks[taskID].updateForEntity(mob)
+                tasks[taskID].updateForEntity(this, mob)
                 return@forEach
             }
 
             // stop the current task and swap to and then star the next task
             stopCurrentTaskForEntity(mob)
-            entities[mob] = taskID
+            entities[mob] = Pair(entities[mob]?.first ?: mob.location, taskID)
             startCurrentTaskForEntity(mob)
         }
     }
 
     private fun getTaskForEntity(entity: Mob): Int {
-        val task = tasks.maxBy { it.getPriority(entity) }
+        val task = tasks.maxBy { it.getPriority(this, entity) }
         return tasks.indexOf(task)
     }
 
     private fun startCurrentTaskForEntity(entity: Mob) {
-        tasks[entities[entity] ?: return].startForEntity(entity)
+        tasks[entities[entity]?.second ?: return].startForEntity(this, entity)
     }
 
     private fun stopCurrentTaskForEntity(entity: Mob) {
-        tasks[entities[entity] ?: return].stopForEntity(entity)
+        tasks[entities[entity]?.second ?: return].stopForEntity(this, entity)
     }
 
     fun removeInRange(location: Location, range: Float) {

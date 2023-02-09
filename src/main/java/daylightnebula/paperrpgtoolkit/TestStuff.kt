@@ -3,14 +3,14 @@ package daylightnebula.paperrpgtoolkit
 import daylightnebula.paperrpgtoolkit.dialogue.DialogueChain
 import daylightnebula.paperrpgtoolkit.dialogue.DialogueLink
 import daylightnebula.paperrpgtoolkit.entities.CustomMob
-import daylightnebula.paperrpgtoolkit.entities.StayAtPointTask
+import daylightnebula.paperrpgtoolkit.entities.tasks.AttackNearbyPlayersTask
+import daylightnebula.paperrpgtoolkit.entities.tasks.WanderNearPointTask
 import daylightnebula.paperrpgtoolkit.goals.impl.*
 import daylightnebula.paperrpgtoolkit.items.CustomItem
 import daylightnebula.paperrpgtoolkit.npc.NPC
 import daylightnebula.paperrpgtoolkit.quests.QuestChain
 import daylightnebula.paperrpgtoolkit.quests.QuestLink
 import org.bukkit.Bukkit
-import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.entity.EntityType
 
@@ -49,12 +49,20 @@ object TestStuff {
 
         // create custom mob
         darkSkeleton = CustomMob(
-            "darkskeleton",
-            "§0Dark Skeleton",
-            EntityType.WITHER_SKELETON,
+            id ="darkskeleton",
+            displayName = "§0Dark Skeleton",
+            supertype = EntityType.WITHER_SKELETON,
             maxHealth = 40.0,
             tasks = arrayOf(
-                StayAtPointTask(Location(world, -3009.5, 70.26, 1282.5))
+                WanderNearPointTask(
+                    //Location(world, -3009.5, 70.26, 1282.5),
+                    wanderRange = 10f,
+                    minTicksBetweenMove = 30,
+                    maxTicksBetweenMove = 100
+                ),
+                AttackNearbyPlayersTask(
+                    detectRange = 5f
+                )
             )
         )
 
