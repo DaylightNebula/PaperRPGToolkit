@@ -93,6 +93,6 @@ class NPC(
     fun removeEntities(toRemove: List<Entity>) {
         // kill all the entities and remove them from the entities list
         toRemove.forEach { it.remove() }
-        entities.removeAll(toRemove.toSet())
+        entities.removeAll(toRemove)
     }
 }

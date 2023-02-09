@@ -40,6 +40,7 @@ class PaperRPGToolkit : JavaPlugin() {
 
         // start the update loops
         DialogueChain.startUpdateLoop()
+        CustomMob.startUpdateLoop()
 
         // if tests are enabled, init them
         if (testsEnabled) TestStuff.init()

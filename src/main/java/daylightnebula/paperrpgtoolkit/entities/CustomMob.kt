@@ -1,6 +1,8 @@
 package daylightnebula.paperrpgtoolkit.entities
 
+import daylightnebula.paperrpgtoolkit.PaperRPGToolkit
 import net.kyori.adventure.text.Component
+import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.EntityType
@@ -32,12 +34,18 @@ class CustomMob(
     companion object {
         val mobs = mutableListOf<CustomMob>()
 
+        fun startUpdateLoop() {
+            Bukkit.getScheduler().runTaskTimer(PaperRPGToolkit.plugin, Runnable {
+                mobs.forEach { it.updateAllEntities() }
+            }, 1L, 1L)
+        }
+
         fun removeAllActiveEntities() {
             mobs.forEach { mob -> mob.removeAll() }
         }
     }
 
-    private val entities = mutableListOf<Mob>()
+    private val entities = hashMapOf<Mob, Int>() // Format: bukkit entity, current task index
 
     init {
         mobs.add(this)
@@ -53,6 +61,8 @@ class CustomMob(
         entity.removeWhenFarAway = false
         entity.canPickupItems = false
         entity.equipment.clear()
+
+        Bukkit.getMobGoals().removeAllGoals(entity)
 
         // set stats
         if (maxHealth != null) entity.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.baseValue = maxHealth
@@ -77,18 +87,56 @@ class CustomMob(
         onMobCreate(entity)
 
         // track the entity
-        entities.add(entity)
+        entities[entity] = getTaskForEntity(entity)
+        startCurrentTaskForEntity(entity)
+    }
+
+    private fun updateAllEntities() {
+        // for each active entity
+        entities.forEach { (mob, curTaskIdx) ->
+            // check if its task has changed
+            val taskID = getTaskForEntity(mob)
+            if (taskID == curTaskIdx) {
+                // if task has not changed, update and cancel
+                tasks[taskID].updateForEntity(mob)
+                return@forEach
+            }
+
+            // stop the current task and swap to and then star the next task
+            stopCurrentTaskForEntity(mob)
+            entities[mob] = taskID
+            startCurrentTaskForEntity(mob)
+        }
+    }
+
+    private fun getTaskForEntity(entity: Mob): Int {
+        val task = tasks.maxBy { it.getPriority(entity) }
+        return tasks.indexOf(task)
+    }
+
+    private fun startCurrentTaskForEntity(entity: Mob) {
+        tasks[entities[entity] ?: return].startForEntity(entity)
+    }
+
+    private fun stopCurrentTaskForEntity(entity: Mob) {
+        tasks[entities[entity] ?: return].stopForEntity(entity)
     }
 
     fun removeInRange(location: Location, range: Float) {
         val rangeSq = range.pow(2f)
-        val toRemove = entities.filter { it.location.distanceSquared(location) < rangeSq }
-        toRemove.forEach { it.remove() }
-        entities.removeAll(toRemove)
+        val toRemove = entities.filter { it.key.location.distanceSquared(location) < rangeSq }
+        toRemove.forEach {
+            stopCurrentTaskForEntity(it.key)
+            it.key.remove()
+            entities.remove(it.key)
+        }
     }
 
     fun removeAll() {
-        entities.forEach { it.remove() }
+        entities.forEach {
+            stopCurrentTaskForEntity(it.key)
+            it.key.remove()
+        }
         entities.clear()
     }
 }

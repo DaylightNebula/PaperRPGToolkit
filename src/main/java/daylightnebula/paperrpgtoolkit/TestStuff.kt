@@ -3,11 +3,14 @@ package daylightnebula.paperrpgtoolkit
 import daylightnebula.paperrpgtoolkit.dialogue.DialogueChain
 import daylightnebula.paperrpgtoolkit.dialogue.DialogueLink
 import daylightnebula.paperrpgtoolkit.entities.CustomMob
+import daylightnebula.paperrpgtoolkit.entities.StayAtPointTask
 import daylightnebula.paperrpgtoolkit.goals.impl.*
 import daylightnebula.paperrpgtoolkit.items.CustomItem
 import daylightnebula.paperrpgtoolkit.npc.NPC
 import daylightnebula.paperrpgtoolkit.quests.QuestChain
 import daylightnebula.paperrpgtoolkit.quests.QuestLink
+import org.bukkit.Bukkit
+import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.entity.EntityType
 
@@ -22,6 +25,8 @@ object TestStuff {
     private lateinit var darkSkeleton: CustomMob
 
     fun init() {
+        val world = Bukkit.getWorlds().first()
+
         // create test custom item
         funSword = CustomItem(
             "testsword",
@@ -48,6 +53,9 @@ object TestStuff {
             "§0Dark Skeleton",
             EntityType.WITHER_SKELETON,
             maxHealth = 40.0,
+            tasks = arrayOf(
+                StayAtPointTask(Location(world, -3009.5, 70.26, 1282.5))
+            )
         )
 
         // bob yes/no apples dialogues
