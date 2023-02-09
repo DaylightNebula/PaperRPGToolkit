@@ -1,12 +1,21 @@
 package daylightnebula.paperrpgtoolkit.npc
 
+import com.destroystokyo.paper.entity.ai.GoalKey
+import com.destroystokyo.paper.entity.ai.GoalType
+import daylightnebula.paperrpgtoolkit.PaperRPGToolkit
+import daylightnebula.paperrpgtoolkit.goals.Goal
 import net.kyori.adventure.text.Component
+import org.bukkit.Bukkit
 import org.bukkit.Location
+import org.bukkit.NamespacedKey
 import org.bukkit.entity.Entity
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.LivingEntity
+import org.bukkit.entity.Mob
 import org.bukkit.entity.Player
+import org.bukkit.entity.Villager
 import org.bukkit.event.player.PlayerInteractEntityEvent
+import java.util.*
 import kotlin.math.pow
 
 class NPC(
@@ -52,9 +61,14 @@ class NPC(
         // shh...  We will handle our own sound effects
         entity.isSilent = true
 
-        // if the entity is a living entity, disable its AI so that it doesn't wander off
-        if (entity is LivingEntity)
+        // if living entity, we have some more options to change
+        if (entity is LivingEntity) {
+            entity.removeWhenFarAway = false
+            entity.canPickupItems = false
+            entity.equipment?.clear()
+            entity.noDamageTicks = Int.MAX_VALUE
             entity.setAI(false)
+        }
 
         // set the entities name
         if (name != null) {
