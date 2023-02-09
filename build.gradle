@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'org.jetbrains.kotlin.jvm' version '1.8.0-RC'
+    id "com.github.johnrengelman.shadow" version "6.1.0"
 }
 
 group = 'daylightnebula'
@@ -61,6 +62,7 @@ compileTestKotlin {
 }
 
 jar {
+    finalizedBy(shadowJar)
     destinationDir = file("D:\\javadev\\PaperRPGToolkit\\testserver\\plugins")
 
     // To avoid the duplicate handling strategy error

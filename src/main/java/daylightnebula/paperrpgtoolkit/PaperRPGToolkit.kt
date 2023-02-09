@@ -1,6 +1,9 @@
 package daylightnebula.paperrpgtoolkit
 
 import daylightnebula.paperrpgtoolkit.dialogue.DialogueChain
+import daylightnebula.paperrpgtoolkit.entities.CustomMob
+import daylightnebula.paperrpgtoolkit.entities.RemoveNearbyMobsCommand
+import daylightnebula.paperrpgtoolkit.entities.SpawnMobCommand
 import daylightnebula.paperrpgtoolkit.items.CustomItemCommand
 import daylightnebula.paperrpgtoolkit.npc.NPC
 import daylightnebula.paperrpgtoolkit.npc.RemoveNearbyNPCCommand
@@ -9,6 +12,8 @@ import daylightnebula.paperrpgtoolkit.quests.AdvanceQuestChainCommand
 import daylightnebula.paperrpgtoolkit.quests.EndQuestChainCommand
 import daylightnebula.paperrpgtoolkit.quests.StartQuestChainCommand
 import org.bukkit.Bukkit
+import org.bukkit.Difficulty
+import org.bukkit.GameRule
 import org.bukkit.NamespacedKey
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -38,6 +43,16 @@ class PaperRPGToolkit : JavaPlugin() {
 
         // if tests are enabled, init them
         if (testsEnabled) TestStuff.init()
+
+        // make sure each world is ready for all of our stuff
+        Bukkit.getWorlds().forEach {
+            // make sure game mode is at least easy
+            if (it.difficulty == Difficulty.PEACEFUL)
+                it.difficulty = Difficulty.EASY
+
+            // disable natural mob spawning
+            it.setGameRule(GameRule.DO_MOB_SPAWNING, false)
+        }
     }
 
     fun registerCommands() {
@@ -47,9 +62,13 @@ class PaperRPGToolkit : JavaPlugin() {
         this.getCommand("advancequestchain")?.setExecutor(AdvanceQuestChainCommand())
         this.getCommand("spawnnpc")?.setExecutor(SpawnNPCCommand())
         this.getCommand("removenearbynpcs")?.setExecutor(RemoveNearbyNPCCommand())
+        this.getCommand("spawnmob")?.setExecutor(SpawnMobCommand())
+        this.getCommand("removenearbymobs")?.setExecutor(RemoveNearbyMobsCommand())
     }
 
     override fun onDisable() {
+        // remove any active custom entities
         NPC.removeAllNPCs()
+        CustomMob.removeAllActiveEntities()
     }
 }

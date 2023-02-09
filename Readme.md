@@ -27,14 +27,39 @@
        - [x] Press shift goal
        - [x] Press hot bar number and switch dialogue chain
  - [ ] Custom Mobs
-   - [ ] Entity Goals
-     - [ ] Wander near point (if point given is null, default to spawn point) (average time between wander and well as spread) (take over when out of range option)
-     - [ ] Stay at point (if point given is null, default to spawn point)
+   - [ ] Entity Tasks
+     - [ ] Wander near point (average time between wander and well as spread) (take over when out of range option)
+     - [x] Stay at point 
      - [ ] Attack nearby players
    - [ ] Spawn command
-   - [ ] Spawner area
-   - [ ] Custom models
    - [ ] Update "kill number of entities" quest goal to account for custom mobs accordingly
+ - [ ] Custom Mob Spawner
+   - [ ] Maximum active
+   - [ ] Minimum active
+   - [ ] Range
+ - [ ] Allow for json configs so that code is not always necessary and vice versa
+   - [ ] Items
+   - [ ] NPCs
+     - [ ] On click actions
+       - [ ] Start dialogue
+       - [ ] Start quest
+       - [ ] Custom
+   - [ ] Goals
+   - [ ] Dialogues
+   - [ ] Quests
+   - [ ] Mobs
+     - [ ] Entity Tasks
+   - [ ] Disable normal mob spawning options
+   - [ ] Spawners
+ - [ ] Save system
+   - [ ] NPC spawns
+   - [ ] Mob spawns (only those not from a spawner)
+   - [ ] Player
+     - [ ] Quest state
+     - [ ] Quests completed
+       - [ ] Update quest complete function to report if the player finished the quest for the first time
+     - [ ] Dialogues completed
+       - [ ] Update dialogue complete function to report if the player finished the dialogue for the first time
  - [ ] Custom Resource Pack
    - [ ] Generate item models from .bbmodel files or just textures
    - [ ] Add custom model support for items

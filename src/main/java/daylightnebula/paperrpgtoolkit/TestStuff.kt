@@ -2,6 +2,7 @@ package daylightnebula.paperrpgtoolkit
 
 import daylightnebula.paperrpgtoolkit.dialogue.DialogueChain
 import daylightnebula.paperrpgtoolkit.dialogue.DialogueLink
+import daylightnebula.paperrpgtoolkit.entities.CustomMob
 import daylightnebula.paperrpgtoolkit.goals.impl.*
 import daylightnebula.paperrpgtoolkit.items.CustomItem
 import daylightnebula.paperrpgtoolkit.npc.NPC
@@ -18,6 +19,7 @@ object TestStuff {
     private lateinit var bobAskForApples: DialogueChain
     private lateinit var bobNoApples: DialogueChain
     private lateinit var bobFoundApples: DialogueChain
+    private lateinit var darkSkeleton: CustomMob
 
     fun init() {
         // create test custom item
@@ -38,6 +40,14 @@ object TestStuff {
             onPlayerInteract = { player ->
                 bobAskForApples.startForPlayer(player)
             }
+        )
+
+        // create custom mob
+        darkSkeleton = CustomMob(
+            "darkskeleton",
+            "§0Dark Skeleton",
+            EntityType.WITHER_SKELETON,
+            maxHealth = 40.0,
         )
 
         // bob yes/no apples dialogues

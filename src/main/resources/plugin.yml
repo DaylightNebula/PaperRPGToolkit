@@ -24,3 +24,9 @@ commands:
   removenearbynpcs:
     description: Remove nearby NPCs
     usage: /removenearbynpcs [kill radius]
+  spawnmob:
+    description: Spawn Custom Mob
+    usage: /spawnmob <mob id>
+  removenearbymobs:
+    description: Remove nearby custom mobs of a certain type or of all types
+    usage: /removenearbymobs <mob id> <range>
