@@ -1,6 +1,7 @@
 package daylightnebula.paperrpgtoolkit.goals.impl
 
 import daylightnebula.paperrpgtoolkit.PaperRPGToolkit
+import daylightnebula.paperrpgtoolkit.entities.CustomMob
 import daylightnebula.paperrpgtoolkit.goals.Goal
 import org.bukkit.Bukkit
 import org.bukkit.entity.EntityType
@@ -14,8 +15,9 @@ import java.util.*
 import kotlin.math.pow
 
 class KillEntityGoal(
-    private val entityType: EntityType,
-    private val minKills: Int,
+    private val entityType: EntityType? = null,
+    private val customMobID: String = "",
+    private val minKills: Int = 1,
     private val location: Vector? = null,
     private val radius: Float = 1f
 ): Listener, Goal() {
@@ -23,14 +25,23 @@ class KillEntityGoal(
     private val killsCounter = hashMapOf<UUID, Int>()
 
     init {
-        Bukkit.getPluginManager().registerEvents(this, PaperRPGToolkit.plugin)
+        // guarantee target entity
+        if (entityType == null && customMobID.isBlank())
+            Bukkit.broadcastMessage("§cKillEntityGoal must be supplied with a valid entity type or custom mob ID for use")
+        else
+            Bukkit.getPluginManager().registerEvents(this, PaperRPGToolkit.plugin)
     }
 
     @EventHandler
     fun onEntityDeath(event: EntityDeathEvent) {
-        // get target and make sure it has the correct type
+        // get target
         val target = event.entity
-        if (target.type != entityType) return
+
+        // if we are using a custom entity ID, check against display name and entity type of the custom mob
+        if (customMobID.isNotBlank()) {
+            val mob = CustomMob.mobs.firstOrNull { it.id == customMobID } ?: return
+            if (mob.dnComponents != target.customName() || mob.supertype != target.type) return
+        } else if (customMobID.isBlank() && target.type != entityType) return
 
         // get killed by, cancel if it is not a player
         val killedBy = (target.lastDamageCause as? EntityDamageByEntityEvent ?: return).damager as? Player ?: return

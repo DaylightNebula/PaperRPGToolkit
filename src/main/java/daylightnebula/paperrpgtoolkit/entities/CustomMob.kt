@@ -11,8 +11,8 @@ import kotlin.math.pow
 
 class CustomMob(
     val id: String,
-    private val displayName: String,
-    private val supertype: EntityType,
+    displayName: String,
+    val supertype: EntityType,
 
     // stats
     private val maxHealth: Double? = null,
@@ -45,6 +45,7 @@ class CustomMob(
         }
     }
 
+    val dnComponents = Component.text(displayName)
     val entities = hashMapOf<Mob, Pair<Location, Int>>() // Format: bukkit entity, current task index
 
     init {
@@ -78,8 +79,8 @@ class CustomMob(
         if (luck != null) entity.getAttribute(Attribute.GENERIC_LUCK)?.baseValue = luck
 
         // set display name
-        if (displayName != "") {
-            entity.customName(Component.text(displayName))
+        if (dnComponents.content().isNotBlank()) {
+            entity.customName(dnComponents)
             entity.isCustomNameVisible = true
         }
 
