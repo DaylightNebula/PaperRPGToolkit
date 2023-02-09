@@ -33,10 +33,10 @@
      - [x] Attack nearby players
    - [x] Spawn command
    - [x] Update "kill number of entities" goal to account for custom mobs accordingly
- - [ ] Custom Mob Spawner
-   - [ ] Maximum active
-   - [ ] Minimum active
-   - [ ] Range
+ - [x] Custom Mob Spawner
+   - [x] Maximum active
+   - [x] Minimum active
+   - [x] Range
  - [ ] Allow for json configs so that code is not always necessary and vice versa
    - [ ] Items
    - [ ] NPCs

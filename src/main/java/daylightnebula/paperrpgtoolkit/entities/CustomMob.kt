@@ -5,8 +5,10 @@ import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.attribute.Attribute
+import org.bukkit.entity.Entity
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Mob
+import java.lang.IllegalArgumentException
 import kotlin.math.pow
 
 class CustomMob(
@@ -52,9 +54,9 @@ class CustomMob(
         mobs.add(this)
     }
 
-    fun spawnEntityAtLocation(location: Location) {
+    fun spawnEntityAtLocation(location: Location): Mob {
         // spawn entity and make sure it is a mob
-        val entity = location.world.spawnEntity(location, supertype) as? Mob ?: return
+        val entity = location.world.spawnEntity(location, supertype) as? Mob ?: throw IllegalArgumentException("Entity type give must be a mob")
 
         // set flags
         entity.isPersistent = false
@@ -90,9 +92,19 @@ class CustomMob(
         // track the entity
         entities[entity] = Pair(location, getTaskForEntity(entity))
         startCurrentTaskForEntity(entity)
+
+        // return the final entity
+        return entity
     }
 
     private fun updateAllEntities() {
+        // remove dead entities
+        val deadEntities = entities.keys.filter { it.isDead }
+        deadEntities.forEach {
+            stopCurrentTaskForEntity(it)
+            entities.remove(it)
+        }
+
         // for each active entity
         entities.forEach { (mob, pair) ->
             val curTaskIdx = pair.second

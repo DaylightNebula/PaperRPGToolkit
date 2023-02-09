@@ -30,3 +30,9 @@ commands:
   removenearbymobs:
     description: Remove nearby custom mobs of a certain type or of all types
     usage: /removenearbymobs <mob id> <range>
+  removenearbyspawners:
+    description: Remove nearby spawners
+    usage: /removenearbyspawners <radius>
+  createmobspawner:
+    description: Creates a new mob spawner
+    usage: /createmobspawner <custom mob id or entity type> <radius> [<x> <y> <z>] [<min children> <max children>] [<min time between spawn> <max time between spawn>]

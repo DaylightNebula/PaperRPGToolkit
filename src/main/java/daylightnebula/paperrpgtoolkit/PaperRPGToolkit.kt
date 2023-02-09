@@ -11,6 +11,9 @@ import daylightnebula.paperrpgtoolkit.npc.SpawnNPCCommand
 import daylightnebula.paperrpgtoolkit.quests.AdvanceQuestChainCommand
 import daylightnebula.paperrpgtoolkit.quests.EndQuestChainCommand
 import daylightnebula.paperrpgtoolkit.quests.StartQuestChainCommand
+import daylightnebula.paperrpgtoolkit.spawner.CreateMobSpawner
+import daylightnebula.paperrpgtoolkit.spawner.MobSpawner
+import daylightnebula.paperrpgtoolkit.spawner.RemoveNearbySpawners
 import org.bukkit.Bukkit
 import org.bukkit.Difficulty
 import org.bukkit.GameRule
@@ -41,6 +44,7 @@ class PaperRPGToolkit : JavaPlugin() {
         // start the update loops
         DialogueChain.startUpdateLoop()
         CustomMob.startUpdateLoop()
+        MobSpawner.startUpdateLoop()
 
         // if tests are enabled, init them
         if (testsEnabled) TestStuff.init()
@@ -65,6 +69,8 @@ class PaperRPGToolkit : JavaPlugin() {
         this.getCommand("removenearbynpcs")?.setExecutor(RemoveNearbyNPCCommand())
         this.getCommand("spawnmob")?.setExecutor(SpawnMobCommand())
         this.getCommand("removenearbymobs")?.setExecutor(RemoveNearbyMobsCommand())
+        this.getCommand("createmobspawner")?.setExecutor(CreateMobSpawner())
+        this.getCommand("removenearbyspawners")?.setExecutor(RemoveNearbySpawners())
     }
 
     override fun onDisable() {
