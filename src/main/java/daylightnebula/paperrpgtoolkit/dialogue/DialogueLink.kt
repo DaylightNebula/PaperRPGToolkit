@@ -9,7 +9,7 @@ import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 
 class DialogueLink(
-    val npc: NPC,
+    val npcID: String,
     val text: String,
     private val goal: Goal,
     val lockPlayer: Boolean,
@@ -18,20 +18,22 @@ class DialogueLink(
 ): GoalInterface {
 
     lateinit var chain: DialogueChain
+    var npc: NPC? = null
 
     fun init(chain: DialogueChain) {
         this.chain = chain
         goal.init(this)
     }
 
-    private val playerToEntity = hashMapOf<Player, Entity>()
+    private val playerToEntity = hashMapOf<Player, Entity?>()
 
     fun getTargetEntityForPlayer(player: Player): Entity? {
         return playerToEntity[player]
     }
 
     fun startForPlayer(player: Player) {
-        playerToEntity[player] = npc.entities.minBy { it.location.distanceSquared(player.location) }
+        npc = NPC.npcs[npcID]
+        playerToEntity[player] = npc?.entities?.minBy { it.location.distanceSquared(player.location) }
         goal.startForPlayer(player)
         chain.draw(player, this)
     }

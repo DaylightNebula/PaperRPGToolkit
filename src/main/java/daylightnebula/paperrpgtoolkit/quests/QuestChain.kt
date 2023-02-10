@@ -18,6 +18,10 @@ class QuestChain(
     companion object {
         val questChains = hashMapOf<String, QuestChain>()
         val curQuest = hashMapOf<Player, String>()
+
+        fun startForPlayer(id: String, player: Player) {
+            questChains[id]?.startForPlayer(player)
+        }
     }
 
     // tracks which

@@ -17,7 +17,8 @@ import org.bukkit.util.StringUtil
 import java.awt.Component
 
 class DialogueChain(
-    val links: Array<DialogueLink>,
+    val id: String,
+    private val links: Array<DialogueLink>,
     val onComplete: (player: Player) -> Unit = {}
 ) {
 
@@ -30,6 +31,10 @@ class DialogueChain(
             Bukkit.getScheduler().runTaskTimer(PaperRPGToolkit.plugin, Runnable {
                 chains.forEach { it.update() }
             }, 1L, 1L)
+        }
+
+        fun startChainForPlayer(id: String, player: Player) {
+            chains.firstOrNull { it.id.equals(id, ignoreCase = true) }?.startForPlayer(player)
         }
     }
 
@@ -105,7 +110,7 @@ class DialogueChain(
 
         // get message lines
         val messageLines = listOf(
-            link.npc.name ?: "????",
+            link.npc?.name ?: "????",
             *ChatPaginator.wordWrap(link.text, limitPerLine)
         )
 

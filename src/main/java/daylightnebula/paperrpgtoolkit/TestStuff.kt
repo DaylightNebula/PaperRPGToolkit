@@ -43,7 +43,7 @@ object TestStuff {
             "§dBob the builder",
             EntityType.VILLAGER,
             onPlayerInteract = { player ->
-                bobAskForApples.startForPlayer(player)
+                DialogueChain.startChainForPlayer("bobAskForApples", player)
             }
         )
 
@@ -68,9 +68,10 @@ object TestStuff {
 
         // bob yes/no apples dialogues
         bobNoApples = DialogueChain(
+            "bobNoApples",
             arrayOf(
                 DialogueLink(
-                    bob,
+                    "bob",
                     "SMH",
                     PressShiftGoal(),
                     true
@@ -78,9 +79,10 @@ object TestStuff {
             )
         )
         bobFoundApples = DialogueChain(
+            "bobFoundApples",
             arrayOf(
                 DialogueLink(
-                    bob,
+                    "bob",
                     "Thank you for the apples!",
                     PressShiftGoal(),
                     true
@@ -90,7 +92,7 @@ object TestStuff {
 
         // setup quest chain
         bobsApples = QuestChain(
-            "bobsapples",
+            "bobsApples",
             "Bobs Apples",
             "Bob needs your help finding some apples.",
             arrayOf(
@@ -102,28 +104,29 @@ object TestStuff {
                 QuestLink(
                     "Talk to Bob",
                     "Give Bob the 10 apples you just found.",
-                    ClickNPCWithItemGoal(bob, item(Material.APPLE), 10, true),
-                    onGoalComplete = { bobFoundApples.startForPlayer(it) }
+                    ClickNPCWithItemGoal("bob", item(Material.APPLE), 10, true),
+                    onGoalComplete = { DialogueChain.startChainForPlayer("bobFoundApples", it) }
                 ),
                 QuestLink(
                     "Talk to Bob",
                     "Talk to Bob",
-                    CompleteDialogueGoal(bobFoundApples)
+                    CompleteDialogueGoal("bobFoundApples")
                 )
             )
         )
 
         // create dialogue
         bobAskForApples = DialogueChain(
+            "bobAskForApples",
             arrayOf(
                 DialogueLink(
-                    bob,
+                    "bob",
                     "Hi.  My Name is Bob.",
                     PressShiftGoal(),
                     true
                 ),
                 DialogueLink(
-                    bob,
+                    "bob",
                     "Can you help me find 10 apples?",
                     SelectNumberedOptionGoal(0, 1),
                     true,
@@ -131,13 +134,14 @@ object TestStuff {
                         "Yes",
                         "No"
                     )
-                ) { player, option ->
-                    if (option == 0)
-                        bobsApples.startForPlayer(player)
-                    else
-                        bobNoApples.startForPlayer(player)
-                }
-            )
+                )
+            ),
+            onComplete =  { player ->
+                if (player.inventory.heldItemSlot == 0)
+                    QuestChain.startForPlayer("bobsApples", player)
+                else
+                    DialogueChain.startChainForPlayer("bobNoApples", player)
+            }
         )
     }
 }

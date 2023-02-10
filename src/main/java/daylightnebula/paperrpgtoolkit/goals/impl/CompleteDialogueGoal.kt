@@ -9,7 +9,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 
-class CompleteDialogueGoal(private val chain: DialogueChain): Listener, Goal() {
+class CompleteDialogueGoal(private val chainID: String): Listener, Goal() {
 
     val activePlayers = mutableListOf<Player>()
 
@@ -19,7 +19,7 @@ class CompleteDialogueGoal(private val chain: DialogueChain): Listener, Goal() {
 
     @EventHandler
     fun onDialogueFinish(event: DialogueFinishEvent) {
-        if (activePlayers.contains(event.player) && event.dialogueChain == chain)
+        if (activePlayers.contains(event.player) && event.dialogueChain.id == chainID)
             finishGoal(event.player)
     }
 

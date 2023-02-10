@@ -19,7 +19,7 @@ import java.util.*
 import kotlin.math.pow
 
 class NPC(
-    id: String,
+    val id: String,
     val name: String?,
     private val entityType: EntityType,
     private val onCreateNew: (entity: Entity) -> Unit = {},

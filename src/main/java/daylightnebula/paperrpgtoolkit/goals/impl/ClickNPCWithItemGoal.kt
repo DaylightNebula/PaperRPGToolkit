@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 
 class ClickNPCWithItemGoal(
-    private val targetNPC: NPC,
+    private val targetNPCID: String,
     private val targetItem: ItemStack,
     private val amount: Int,
     private val shouldRemove: Boolean
@@ -24,7 +24,7 @@ class ClickNPCWithItemGoal(
 
     fun interact(player: Player, npc: NPC, item: ItemStack): Boolean { // return true if that is our item and npc
         // make sure npc is the target npc
-        if (npc != targetNPC) return false
+        if (npc.id != targetNPCID) return false
 
         // make sure player has quest
         if (!activePlayers.containsKey(player)) return false
