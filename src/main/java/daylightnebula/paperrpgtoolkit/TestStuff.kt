@@ -29,16 +29,6 @@ object TestStuff {
     fun init() {
         val world = Bukkit.getWorlds().first()
 
-        // create test custom item
-        funSword = CustomItem(
-            "testsword",
-            Material.IRON_SWORD,
-            "Test Sword",
-            "Bestest test sword",
-            attackDamage = 3.0,
-            attackSpeed = 1.5
-        )
-
         // create NPC
         bob = NPC(
             "bob",

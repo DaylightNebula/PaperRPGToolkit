@@ -38,7 +38,7 @@
    - [x] Minimum active
    - [x] Range
  - [ ] Allow for json configs so that code is not always necessary and vice versa
-   - [ ] Items
+   - [x] Items
    - [ ] NPCs
      - [ ] On click actions
        - [ ] Start dialogue
@@ -47,8 +47,8 @@
    - [ ] Goals
    - [ ] Dialogues
    - [ ] Quests
-   - [ ] Mobs
-     - [ ] Entity Tasks
+   - [x] Mobs
+     - [x] Entity Tasks
    - [ ] Disable normal mob spawning options
    - [ ] Spawners
  - [ ] Save system

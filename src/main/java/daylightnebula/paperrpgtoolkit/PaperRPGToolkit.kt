@@ -4,6 +4,7 @@ import daylightnebula.paperrpgtoolkit.dialogue.DialogueChain
 import daylightnebula.paperrpgtoolkit.entities.CustomMob
 import daylightnebula.paperrpgtoolkit.entities.RemoveNearbyMobsCommand
 import daylightnebula.paperrpgtoolkit.entities.SpawnMobCommand
+import daylightnebula.paperrpgtoolkit.items.CustomItem
 import daylightnebula.paperrpgtoolkit.items.CustomItemCommand
 import daylightnebula.paperrpgtoolkit.npc.NPC
 import daylightnebula.paperrpgtoolkit.npc.RemoveNearbyNPCCommand
@@ -44,6 +45,7 @@ class PaperRPGToolkit : JavaPlugin() {
 
         // load waiting json
         CustomMob.loadJSONFromFolder(File(dataFolder, "mobs"))
+        CustomItem.loadJSONFromFolder(File(dataFolder, "items"))
 
         // start the update loops
         DialogueChain.startUpdateLoop()
@@ -64,12 +66,13 @@ class PaperRPGToolkit : JavaPlugin() {
         }
 
         // after 1 tick, finalize json loading
-        Bukkit.getScheduler().runTaskLater(PaperRPGToolkit.plugin, Runnable {
+        Bukkit.getScheduler().runTaskLater(plugin, Runnable {
             CustomMob.loadRemainingJSON()
+            CustomItem.loadRemainingJSON()
         }, 1L)
     }
 
-    fun registerCommands() {
+    private fun registerCommands() {
         this.getCommand("getcustomitem")?.setExecutor(CustomItemCommand())
         this.getCommand("startquestchain")?.setExecutor(StartQuestChainCommand())
         this.getCommand("endquestchain")?.setExecutor(EndQuestChainCommand())
