@@ -14,9 +14,8 @@ import kotlin.random.Random
 
 class MobSpawner(
     val rootLocation: Location,
+    private val targetType: String,
     private val spawnRadius: Float = 2f,
-    private val entityType: EntityType? = null,
-    private val customMobID: String = "",
     private val minTicksBetweenSpawn: Int = 20,
     private val maxTicksBetweenSpawn: Int = 60,
     private val minChildrenEntities: Int = 0,
@@ -33,6 +32,8 @@ class MobSpawner(
     }
 
     private val activeEntities = mutableListOf<Entity>()
+    private val customMob: CustomMob? = CustomMob.mobs.firstOrNull { it.id.equals(targetType, true) }
+    private val entityType: EntityType? = EntityType.values().firstOrNull { it.name.equals(targetType, true) }
 
     init {
         activeSpawners.add(this)
@@ -61,10 +62,9 @@ class MobSpawner(
 
     private fun addEntity() {
         val spawnLocation = getRandomLocationInRange(rootLocation.world) ?: rootLocation
-        val mobHandler = CustomMob.mobs.firstOrNull { it.id == customMobID }
-        if (mobHandler != null) {
+        if (customMob != null) {
             activeEntities.add(
-                mobHandler.spawnEntityAtLocation(spawnLocation)
+                customMob.spawnEntityAtLocation(spawnLocation)
             )
         } else if (entityType != null) {
             rootLocation.world.spawnEntity(spawnLocation, entityType)

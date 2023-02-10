@@ -43,6 +43,8 @@
      - [ ] On click actions
        - [ ] Start dialogue
        - [ ] Start quest
+       - [ ] Give custom item
+       - [ ] Spawn mob (with amount) (both custom and not)
        - [ ] Custom
    - [ ] Goals
    - [ ] Dialogues
