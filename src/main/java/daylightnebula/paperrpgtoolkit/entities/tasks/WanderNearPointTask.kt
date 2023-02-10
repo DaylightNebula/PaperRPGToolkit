@@ -9,6 +9,7 @@ import org.bukkit.block.BlockFace
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Mob
 import org.bukkit.util.Vector
+import org.json.JSONObject
 import kotlin.math.pow
 import kotlin.random.Random
 
@@ -19,6 +20,19 @@ class WanderNearPointTask(
     private val maxTicksBetweenMove: Int = 100,
     private val takeOverWhenOutOfRange: Boolean = false
 ): EntityTask() {
+
+    constructor(json: JSONObject): this(
+        if (json.has("location")) Location(
+            Bukkit.getWorlds()[json.optInt("world", 0)],
+            json.getJSONArray("location").getDouble(0),
+            json.getJSONArray("location").getDouble(1),
+            json.getJSONArray("location").getDouble(2),
+        ) else null,
+        json.optFloat("range", 2f),
+        json.optInt("minWaitTicks", 20),
+        json.optInt("maxWaitTicks", 100),
+        json.optBoolean("forceWhenOutOfRange", false)
+    )
 
     private val rangeSq = wanderRange.pow(2f)
     private val active = hashMapOf<Entity, MoveEntry>()

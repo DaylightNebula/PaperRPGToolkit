@@ -5,14 +5,22 @@ import daylightnebula.paperrpgtoolkit.entities.EntityTask
 import org.bukkit.Bukkit
 import org.bukkit.entity.Mob
 import org.bukkit.entity.Player
+import org.json.JSONObject
 import kotlin.math.pow
 
 class AttackNearbyPlayersTask(
-    detectRange: Float,
+    detectRange: Float = 5f,
     attackRange: Float = 1f,
     private val attackCooldownTicks: Int = 20,
     private val onAttack: ((mob: Mob, target: Player) -> Unit)? = null // if null, do default attack
 ): EntityTask() {
+
+    constructor(json: JSONObject, onAttack: ((mob: Mob, target: Player) -> Unit)? = null): this(
+        json.optFloat("detectRange", 5f),
+        json.optFloat("attackRange", 1f),
+        json.optInt("cooldown", 20),
+        onAttack
+    )
 
     private val dtRangeSq = detectRange.pow(2f)
     private val atRangeSq = attackRange.pow(2f)

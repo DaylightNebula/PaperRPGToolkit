@@ -19,6 +19,7 @@ import org.bukkit.Difficulty
 import org.bukkit.GameRule
 import org.bukkit.NamespacedKey
 import org.bukkit.plugin.java.JavaPlugin
+import java.io.File
 
 class PaperRPGToolkit : JavaPlugin() {
 
@@ -41,6 +42,9 @@ class PaperRPGToolkit : JavaPlugin() {
         // commands
         registerCommands()
 
+        // load waiting json
+        CustomMob.loadJSONFromFolder(File(dataFolder, "mobs"))
+
         // start the update loops
         DialogueChain.startUpdateLoop()
         CustomMob.startUpdateLoop()
@@ -58,6 +62,11 @@ class PaperRPGToolkit : JavaPlugin() {
             // disable natural mob spawning
             it.setGameRule(GameRule.DO_MOB_SPAWNING, false)
         }
+
+        // after 1 tick, finalize json loading
+        Bukkit.getScheduler().runTaskLater(PaperRPGToolkit.plugin, Runnable {
+            CustomMob.loadRemainingJSON()
+        }, 1L)
     }
 
     fun registerCommands() {

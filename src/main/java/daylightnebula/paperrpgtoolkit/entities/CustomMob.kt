@@ -5,9 +5,10 @@ import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.attribute.Attribute
-import org.bukkit.entity.Entity
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Mob
+import org.json.JSONObject
+import java.io.File
 import java.lang.IllegalArgumentException
 import kotlin.math.pow
 
@@ -17,24 +18,38 @@ class CustomMob(
     val supertype: EntityType,
 
     // stats
-    private val maxHealth: Double? = null,
-    private val armor: Double? = null,
-    private val armorToughness: Double? = null,
-    private val movementSpeed: Double? = null,
-    private val attackDamage: Double? = null,
-    private val attackKnockBack: Double? = null,
-    private val attackSpeed: Double? = null,
-    private val followRange: Double? = null,
-    private val flyingSpeed: Double? = null,
-    private val knockBackResistance: Double? = null,
-    private val luck: Double? = null,
+    private val maxHealth: Double = -1.0,
+    private val armor: Double = -1.0,
+    private val armorToughness: Double = -1.0,
+    private val movementSpeed: Double = -1.0,
+    private val attackDamage: Double = -1.0,
+    private val attackKnockBack: Double = -1.0,
+    private val attackSpeed: Double = -1.0,
+    private val followRange: Double = -1.0,
+    private val flyingSpeed: Double = -1.0,
+    private val knockBackResistance: Double = -1.0,
+    private val luck: Double = -1.0,
 
     // other stuffs
-    private val tasks: Array<EntityTask> = arrayOf(),
+    private val tasks: Array<EntityTask?> = arrayOf(),
     private val onMobCreate: (mob: Mob) -> Unit = {}
 ) {
     companion object {
         val mobs = mutableListOf<CustomMob>()
+        val waitingJSON = mutableListOf<Pair<String, JSONObject>>()
+
+        fun loadJSONFromFolder(file: File) {
+            // loop through all json files
+            file.listFiles()?.filter { it.extension == "json" }?.forEach { file ->
+                val id = file.nameWithoutExtension
+                waitingJSON.add(Pair(id, JSONObject(file.readText())))
+            }
+        }
+
+        fun loadRemainingJSON() {
+            waitingJSON.forEach { CustomMob(it.first, it.second) }
+            waitingJSON.clear()
+        }
 
         fun startUpdateLoop() {
             Bukkit.getScheduler().runTaskTimer(PaperRPGToolkit.plugin, Runnable {
@@ -53,6 +68,30 @@ class CustomMob(
     init {
         mobs.add(this)
     }
+    constructor(id: String, json: JSONObject, onMobCreate: (mob: Mob) -> Unit = {}): this(
+        id,
+        json.getString("displayName"),
+        EntityType.values().firstOrNull { it.name.equals(json.getString("supertype"), ignoreCase = true) }
+            ?: throw IllegalArgumentException("Unknown entity type ${json.getString("supertype")}"),
+        json.optDouble("maxHealth", -1.0),
+        json.optDouble("armor", -1.0),
+        json.optDouble("armorToughness", -1.0),
+        json.optDouble("movementSpeed", -1.0),
+        json.optDouble("attackDamage", -1.0),
+        json.optDouble("attackKnockBack", -1.0),
+        json.optDouble("attackSpeed", -1.0),
+        json.optDouble("followRange", -1.0),
+        json.optDouble("flyingSpeed", -1.0),
+        json.optDouble("knockBackResistance", -1.0),
+        json.optDouble("luck", -1.0),
+        EntityTask.convertJSONArrayToTasks(json.optJSONArray("tasks")),
+        onMobCreate
+    )
+    constructor(id: String, onMobCreate: (mob: Mob) -> Unit): this(
+        id, waitingJSON.firstOrNull { it.first == id }?.second ?: throw IllegalArgumentException("Not waiting json with id $id"), onMobCreate
+    ) {
+        waitingJSON.removeIf { it.first == id }
+    }
 
     fun spawnEntityAtLocation(location: Location): Mob {
         // spawn entity and make sure it is a mob
@@ -68,17 +107,17 @@ class CustomMob(
         Bukkit.getMobGoals().removeAllGoals(entity)
 
         // set stats
-        if (maxHealth != null) entity.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.baseValue = maxHealth
-        if (armor != null) entity.getAttribute(Attribute.GENERIC_ARMOR)?.baseValue = armor
-        if (armorToughness != null) entity.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS)?.baseValue = armorToughness
-        if (movementSpeed != null) entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)?.baseValue = movementSpeed
-        if (attackSpeed != null) entity.getAttribute(Attribute.GENERIC_ATTACK_SPEED)?.baseValue = attackSpeed
-        if (attackDamage != null) entity.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE)?.baseValue = attackDamage
-        if (attackKnockBack != null) entity.getAttribute(Attribute.GENERIC_ATTACK_KNOCKBACK)?.baseValue = attackKnockBack
-        if (followRange != null) entity.getAttribute(Attribute.GENERIC_FOLLOW_RANGE)?.baseValue = followRange
-        if (knockBackResistance != null) entity.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE)?.baseValue = knockBackResistance
-        if (flyingSpeed != null) entity.getAttribute(Attribute.GENERIC_FLYING_SPEED)?.baseValue = flyingSpeed
-        if (luck != null) entity.getAttribute(Attribute.GENERIC_LUCK)?.baseValue = luck
+        if (maxHealth != -1.0) entity.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.baseValue = maxHealth
+        if (armor != -1.0) entity.getAttribute(Attribute.GENERIC_ARMOR)?.baseValue = armor
+        if (armorToughness != -1.0) entity.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS)?.baseValue = armorToughness
+        if (movementSpeed != -1.0) entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)?.baseValue = movementSpeed
+        if (attackSpeed != -1.0) entity.getAttribute(Attribute.GENERIC_ATTACK_SPEED)?.baseValue = attackSpeed
+        if (attackDamage != -1.0) entity.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE)?.baseValue = attackDamage
+        if (attackKnockBack != -1.0) entity.getAttribute(Attribute.GENERIC_ATTACK_KNOCKBACK)?.baseValue = attackKnockBack
+        if (followRange != -1.0) entity.getAttribute(Attribute.GENERIC_FOLLOW_RANGE)?.baseValue = followRange
+        if (knockBackResistance != -1.0) entity.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE)?.baseValue = knockBackResistance
+        if (flyingSpeed != -1.0) entity.getAttribute(Attribute.GENERIC_FLYING_SPEED)?.baseValue = flyingSpeed
+        if (luck != -1.0) entity.getAttribute(Attribute.GENERIC_LUCK)?.baseValue = luck
 
         // set display name
         if (dnComponents.content().isNotBlank()) {
@@ -113,7 +152,7 @@ class CustomMob(
             val taskID = getTaskForEntity(mob)
             if (taskID == curTaskIdx) {
                 // if task has not changed, update and cancel
-                tasks[taskID].updateForEntity(this, mob)
+                tasks[taskID]!!.updateForEntity(this, mob)
                 return@forEach
             }
 
@@ -125,16 +164,16 @@ class CustomMob(
     }
 
     private fun getTaskForEntity(entity: Mob): Int {
-        val task = tasks.maxBy { it.getPriority(this, entity) }
+        val task = tasks.maxBy { it?.getPriority(this, entity) ?: -1f }
         return tasks.indexOf(task)
     }
 
     private fun startCurrentTaskForEntity(entity: Mob) {
-        tasks[entities[entity]?.second ?: return].startForEntity(this, entity)
+        tasks[entities[entity]?.second ?: return]!!.startForEntity(this, entity)
     }
 
     private fun stopCurrentTaskForEntity(entity: Mob) {
-        tasks[entities[entity]?.second ?: return].stopForEntity(this, entity)
+        tasks[entities[entity]?.second ?: return]!!.stopForEntity(this, entity)
     }
 
     fun removeInRange(location: Location, range: Float) {

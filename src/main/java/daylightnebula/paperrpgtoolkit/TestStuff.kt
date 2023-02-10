@@ -13,6 +13,8 @@ import daylightnebula.paperrpgtoolkit.quests.QuestLink
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.EntityType
+import org.json.JSONObject
+import java.io.File
 
 object TestStuff {
 
@@ -48,23 +50,24 @@ object TestStuff {
         )
 
         // create custom mob
-        darkSkeleton = CustomMob(
-            id ="darkskeleton",
-            displayName = "§0Dark Skeleton",
-            supertype = EntityType.WITHER_SKELETON,
-            maxHealth = 40.0,
-            tasks = arrayOf(
-                WanderNearPointTask(
-                    //Location(world, -3009.5, 70.26, 1282.5),
-                    wanderRange = 10f,
-                    minTicksBetweenMove = 30,
-                    maxTicksBetweenMove = 100
-                ),
-                AttackNearbyPlayersTask(
-                    detectRange = 5f
-                )
-            )
-        )
+        //darkSkeleton = CustomMob("darkskeleton", JSONObject(File(PaperRPGToolkit.plugin.dataFolder, "mobs/darkskeleton.json").readText()))
+//        darkSkeleton = CustomMob(
+//            id ="darkskeleton",
+//            displayName = "§0Dark Skeleton",
+//            supertype = EntityType.WITHER_SKELETON,
+//            maxHealth = 40.0,
+//            tasks = arrayOf(
+//                WanderNearPointTask(
+//                    //Location(world, -3009.5, 70.26, 1282.5),
+//                    wanderRange = 10f,
+//                    minTicksBetweenMove = 30,
+//                    maxTicksBetweenMove = 100
+//                ),
+//                AttackNearbyPlayersTask(
+//                    detectRange = 5f
+//                )
+//            )
+//        )
 
         // bob yes/no apples dialogues
         bobNoApples = DialogueChain(
