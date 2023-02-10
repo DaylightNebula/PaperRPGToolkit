@@ -40,9 +40,12 @@ class CustomMob(
 
         fun loadJSONFromFolder(file: File) {
             // loop through all json files
-            file.listFiles()?.filter { it.extension == "json" }?.forEach { file ->
-                val id = file.nameWithoutExtension
-                waitingJSON.add(Pair(id, JSONObject(file.readText())))
+            file.listFiles()?.forEach { file ->
+                if (file.extension == "json") {
+                    val id = file.nameWithoutExtension
+                    waitingJSON.add(Pair(id, JSONObject(file.readText())))
+                } else if (file.isDirectory)
+                    loadJSONFromFolder(file)
             }
         }
 
