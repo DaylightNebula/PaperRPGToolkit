@@ -54,7 +54,7 @@ class CreateMobSpawner: CommandExecutor {
         val maxTicksBetweenSpawn = tryToGetArgumentAsInt(args, 8) ?: 500
 
         // create spawner
-        MobSpawner(location, radius, entityType, customMob?.id ?: "", minTicksBetweenSpawn, maxTicksBetweenSpawn, minChildren, maxChildren)
+        MobSpawner(location, entityType?.name ?: "", radius, minTicksBetweenSpawn, maxTicksBetweenSpawn, minChildren, maxChildren)
 
         // success
         return true

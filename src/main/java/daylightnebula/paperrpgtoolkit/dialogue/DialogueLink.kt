@@ -7,15 +7,23 @@ import daylightnebula.paperrpgtoolkit.npc.NPC
 import org.bukkit.Bukkit
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
+import org.json.JSONObject
 
 class DialogueLink(
     val npcID: String,
     val text: String,
     private val goal: Goal,
     val lockPlayer: Boolean,
-    val options: Array<String>? = null,
-    private val callback: ((player: Player, heldSlot: Int) -> Unit)? = null
+    val options: Array<String>? = null
 ): GoalInterface {
+
+    constructor(json: JSONObject): this(
+        json.optString("npc", ""),
+        json.optString("text", ""),
+        Goal.convertJSONToGoal(json.optJSONObject("goal", JSONObject())),
+        json.optBoolean("lock", true),
+        if (json.has("options")) json.getJSONArray("options").map { it as String }.toTypedArray() else null
+    )
 
     lateinit var chain: DialogueChain
     var npc: NPC? = null
@@ -45,7 +53,7 @@ class DialogueLink(
 
     override fun goalComplete(player: Player, goal: Goal) {
         chain.proceedToNextLink(player)
-        callback?.let { it(player, player.inventory.heldItemSlot) }
+        //callback?.let { it(player, player.inventory.heldItemSlot) }
     }
 
     override fun descriptionChanged(player: Player, goal: Goal) {}

@@ -32,30 +32,30 @@ object TestStuff {
         )
 
         // bob yes/no apples dialogues
-        DialogueChain(
-            "bobsApples",
-            "bobNoApples",
-            arrayOf(
-                DialogueLink(
-                    "bob",
-                    "SMH",
-                    PressShiftGoal(),
-                    true
-                )
-            )
-        )
-        DialogueChain(
-            "bobsApples",
-            "bobFoundApples",
-            arrayOf(
-                DialogueLink(
-                    "bob",
-                    "Thank you for the apples!",
-                    PressShiftGoal(),
-                    true
-                )
-            )
-        )
+//        DialogueChain(
+//            "bobsApples",
+//            "bobNoApples",
+//            arrayOf(
+//                DialogueLink(
+//                    "bob",
+//                    "SMH",
+//                    PressShiftGoal(),
+//                    true
+//                )
+//            )
+//        )
+//        DialogueChain(
+//            "bobsApples",
+//            "bobFoundApples",
+//            arrayOf(
+//                DialogueLink(
+//                    "bob",
+//                    "Thank you for the apples!",
+//                    PressShiftGoal(),
+//                    true
+//                )
+//            )
+//        )
 
         // setup quest chain
         QuestChain(
@@ -86,24 +86,6 @@ object TestStuff {
         DialogueChain(
             "bobsApples",
             "bobAskForApples",
-            arrayOf(
-                DialogueLink(
-                    "bob",
-                    "Hi.  My Name is Bob.",
-                    PressShiftGoal(),
-                    true
-                ),
-                DialogueLink(
-                    "bob",
-                    "Can you help me find 10 apples?",
-                    SelectNumberedOptionGoal(0, 1),
-                    true,
-                    arrayOf(
-                        "Yes",
-                        "No"
-                    )
-                )
-            ),
             onComplete =  { player ->
                 if (player.inventory.heldItemSlot == 0)
                     QuestChain.startForPlayer("bobsApples", player)

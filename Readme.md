@@ -47,7 +47,7 @@
        - [ ] Spawn mob (with amount) (both custom and not)
        - [ ] Custom
    - [x] Goals
-   - [ ] Dialogues (convert to id and sub id pair)
+   - [x] Dialogues (convert to id and sub id pair)
    - [ ] Quests (convert to id and sub id pair)
    - [x] Mobs
      - [x] Entity Tasks

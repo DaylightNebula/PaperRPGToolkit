@@ -1,20 +1,17 @@
 package daylightnebula.paperrpgtoolkit.dialogue
 
 import daylightnebula.paperrpgtoolkit.PaperRPGToolkit
+import daylightnebula.paperrpgtoolkit.items.CustomItem
 import io.papermc.paper.entity.LookAnchor
-import net.kyori.adventure.bossbar.BossBar
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.Bukkit
-import org.bukkit.boss.BarColor
-import org.bukkit.boss.BarStyle
-import org.bukkit.entity.HumanEntity
-import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.util.ChatPaginator
-import org.bukkit.util.StringUtil
-import java.awt.Component
+import org.json.JSONArray
+import org.json.JSONObject
+import java.io.File
+import java.lang.IllegalArgumentException
 
 class DialogueChain(
     val id: String,
@@ -26,6 +23,35 @@ class DialogueChain(
     companion object {
         private val chains = mutableListOf<DialogueChain>()
         val occupiedList = mutableListOf<Player>()
+        private val waitingJson = mutableListOf<Triple<String, String, JSONObject>>()
+
+        fun loadJSONFromFolder(folder: File) {
+            folder.listFiles()?.forEach {
+                if (it.extension == "json")
+                    JSONArray(it.readText()).forEach { j ->
+                        val json = j as? JSONObject ?: return@forEach
+                        val subid = json.getString("id") ?: return@forEach
+                        waitingJson.add(
+                            Triple(
+                                it.nameWithoutExtension,
+                                subid,
+                                json
+                            )
+                        )
+                    }
+                else if (it.isDirectory)
+                    loadJSONFromFolder(it)
+            }
+        }
+
+        fun loadWaitingJson() {
+            waitingJson.forEach { triple ->
+                val id = triple.first
+                val subid = triple.second
+                val json = triple.third
+                DialogueChain(id, subid, json)
+            }
+        }
 
         fun startUpdateLoop() {
             // update each dialogue chain every tick
@@ -38,10 +64,25 @@ class DialogueChain(
             getChain(id, subid)?.startForPlayer(player)
         }
 
-        fun getChain(id: String, subid: String): DialogueChain? {
+        private fun getChain(id: String, subid: String): DialogueChain? {
             return chains.firstOrNull { it.id.equals(id, ignoreCase = true) && it.subid.equals(subid, true) }
         }
     }
+
+    constructor(id: String, subid: String, onComplete: (player: Player) -> Unit = {}): this(
+        id, subid,
+        waitingJson.firstOrNull { it.first.equals(id, true) && it.second.equals(subid, true) }?.third
+            ?: throw IllegalArgumentException("Could not find waiting json with id $id"),
+        onComplete
+    ) {
+        waitingJson.removeIf { it.first.equals(id, true) && it.second.equals(subid, true) }
+    }
+    constructor(id: String, subid: String, json: JSONObject, onComplete: (player: Player) -> Unit = {}): this(
+        id,
+        subid,
+        json.optJSONArray("links").map { if (it is JSONObject) DialogueLink(it) else DialogueLink(JSONObject()) }.toTypedArray(),
+        onComplete
+    )
 
     init {
         chains.add(this)
@@ -54,7 +95,8 @@ class DialogueChain(
         // every tick, if the player is in a locked dialogue, update slow and look
         linkCounter.forEach { (player, linkIdx) ->
             if (links[linkIdx].lockPlayer) {
-                player.addPotionEffect(PotionEffect(PotionEffectType.SLOW, 2, 255))
+                player.addPotionEffect(PotionEffect(PotionEffectType.SLOW, 2, 255, true))
+                player.addPotionEffect(PotionEffect(PotionEffectType.JUMP, 2, 255, true))
                 val entity = links[linkIdx].getTargetEntityForPlayer(player) ?: return@forEach
                 player.lookAt(entity, LookAnchor.EYES, LookAnchor.EYES)
             }
