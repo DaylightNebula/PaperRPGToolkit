@@ -18,12 +18,13 @@ import java.awt.Component
 
 class DialogueChain(
     val id: String,
+    val subid: String,
     private val links: Array<DialogueLink>,
     val onComplete: (player: Player) -> Unit = {}
 ) {
 
     companion object {
-        val chains = mutableListOf<DialogueChain>()
+        private val chains = mutableListOf<DialogueChain>()
         val occupiedList = mutableListOf<Player>()
 
         fun startUpdateLoop() {
@@ -33,8 +34,12 @@ class DialogueChain(
             }, 1L, 1L)
         }
 
-        fun startChainForPlayer(id: String, player: Player) {
-            chains.firstOrNull { it.id.equals(id, ignoreCase = true) }?.startForPlayer(player)
+        fun startChainForPlayer(id: String, subid: String, player: Player) {
+            getChain(id, subid)?.startForPlayer(player)
+        }
+
+        fun getChain(id: String, subid: String): DialogueChain? {
+            return chains.firstOrNull { it.id.equals(id, ignoreCase = true) && it.subid.equals(subid, true) }
         }
     }
 
@@ -85,7 +90,7 @@ class DialogueChain(
             endForPlayer(player)
     }
 
-    fun endForPlayer(player: Player) {
+    private fun endForPlayer(player: Player) {
         // clear chat
         for (i in 0 until maxLines) {
             player.sendMessage("")
@@ -102,8 +107,8 @@ class DialogueChain(
         occupiedList.remove(player)
     }
 
-    val maxLines = 10
-    val limitPerLine = 70
+    private val maxLines = 10
+    private val limitPerLine = 70
     fun draw(player: Player, link: DialogueLink) {
         // get the lines for the message
         val linesForMessage = maxLines - (link.options?.size ?: 1)

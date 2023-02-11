@@ -14,9 +14,9 @@ import java.io.File
 import java.lang.IllegalArgumentException
 
 class CustomItem(
-    id: String,
+    val id: String,
     srcMaterial: Material,
-    name: String,
+    val name: String,
     description: String,
     attackDamage: Double = -1.0,
     attackSpeed: Double = -1.0,

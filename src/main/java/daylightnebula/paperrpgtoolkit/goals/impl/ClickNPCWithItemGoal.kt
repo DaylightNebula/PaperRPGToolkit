@@ -2,8 +2,10 @@ package daylightnebula.paperrpgtoolkit.goals.impl
 
 import daylightnebula.paperrpgtoolkit.PaperRPGToolkit
 import daylightnebula.paperrpgtoolkit.goals.Goal
+import daylightnebula.paperrpgtoolkit.items.CustomItem
 import daylightnebula.paperrpgtoolkit.npc.NPC
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
+import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
 import org.bukkit.inventory.ItemStack
@@ -11,12 +13,14 @@ import org.bukkit.persistence.PersistentDataType
 
 class ClickNPCWithItemGoal(
     private val targetNPCID: String,
-    private val targetItem: ItemStack,
+    private val targetItem: String,
     private val amount: Int,
     private val shouldRemove: Boolean
 ): Listener, Goal() {
-    private val isCustom = targetItem.itemMeta.persistentDataContainer.has(PaperRPGToolkit.customItemReferenceIDKey)
-    private val itemName = if (isCustom) targetItem.itemMeta.persistentDataContainer.get(PaperRPGToolkit.customItemReferenceIDKey, PersistentDataType.STRING) else ""
+    //private val isCustom = targetItem.itemMeta.persistentDataContainer.has(PaperRPGToolkit.customItemReferenceIDKey)
+    //private val itemName = if (isCustom) targetItem.itemMeta.persistentDataContainer.get(PaperRPGToolkit.customItemReferenceIDKey, PersistentDataType.STRING) else ""
+    private val customItem = CustomItem.items.values.firstOrNull { it.id.equals(targetItem, true) }
+    private val material = Material.values().firstOrNull { it.name.equals(targetItem, true) }
 
     companion object {
         val activePlayers = hashMapOf<Player, ClickNPCWithItemGoal>()
@@ -32,11 +36,14 @@ class ClickNPCWithItemGoal(
         // check if the item is valid
         val isItemValid =
             // if item is custom, check id to check if valid
-            if (isCustom)
-                item.itemMeta.persistentDataContainer.has(PaperRPGToolkit.customItemReferenceIDKey) && item.itemMeta.persistentDataContainer.get(PaperRPGToolkit.customItemReferenceIDKey, PersistentDataType.STRING) == itemName
+            if (customItem != null)
+                item.itemMeta.persistentDataContainer.has(PaperRPGToolkit.customItemReferenceIDKey) &&
+                        item.itemMeta.persistentDataContainer.get(PaperRPGToolkit.customItemReferenceIDKey, PersistentDataType.STRING) == customItem.name
             // otherwise, check if material and name are equal
+            else if (material != null)
+                item.type == material
             else
-                item.type == targetItem.type
+                false
 
         val isCountValid = item.amount >= amount
 

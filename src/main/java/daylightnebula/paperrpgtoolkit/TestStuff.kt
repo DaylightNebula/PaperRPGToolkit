@@ -18,49 +18,22 @@ import java.io.File
 
 object TestStuff {
 
-    private lateinit var funSword: CustomItem
-    private lateinit var bob: NPC
-    private lateinit var bobsApples: QuestChain
-    private lateinit var bobAskForApples: DialogueChain
-    private lateinit var bobNoApples: DialogueChain
-    private lateinit var bobFoundApples: DialogueChain
-    private lateinit var darkSkeleton: CustomMob
-
     fun init() {
         val world = Bukkit.getWorlds().first()
 
         // create NPC
-        bob = NPC(
+        NPC(
             "bob",
             "§dBob the builder",
             EntityType.VILLAGER,
             onPlayerInteract = { player ->
-                DialogueChain.startChainForPlayer("bobAskForApples", player)
+                DialogueChain.startChainForPlayer("bobsApples", "bobAskForApples", player)
             }
         )
 
-        // create custom mob
-        //darkSkeleton = CustomMob("darkskeleton", JSONObject(File(PaperRPGToolkit.plugin.dataFolder, "mobs/darkskeleton.json").readText()))
-//        darkSkeleton = CustomMob(
-//            id ="darkskeleton",
-//            displayName = "§0Dark Skeleton",
-//            supertype = EntityType.WITHER_SKELETON,
-//            maxHealth = 40.0,
-//            tasks = arrayOf(
-//                WanderNearPointTask(
-//                    //Location(world, -3009.5, 70.26, 1282.5),
-//                    wanderRange = 10f,
-//                    minTicksBetweenMove = 30,
-//                    maxTicksBetweenMove = 100
-//                ),
-//                AttackNearbyPlayersTask(
-//                    detectRange = 5f
-//                )
-//            )
-//        )
-
         // bob yes/no apples dialogues
-        bobNoApples = DialogueChain(
+        DialogueChain(
+            "bobsApples",
             "bobNoApples",
             arrayOf(
                 DialogueLink(
@@ -71,7 +44,8 @@ object TestStuff {
                 )
             )
         )
-        bobFoundApples = DialogueChain(
+        DialogueChain(
+            "bobsApples",
             "bobFoundApples",
             arrayOf(
                 DialogueLink(
@@ -84,7 +58,7 @@ object TestStuff {
         )
 
         // setup quest chain
-        bobsApples = QuestChain(
+        QuestChain(
             "bobsApples",
             "Bobs Apples",
             "Bob needs your help finding some apples.",
@@ -92,24 +66,25 @@ object TestStuff {
                 QuestLink(
                     "Find Bobs Apples",
                     "Pickup 10 apples.",
-                    GetItemGoal(item(Material.APPLE), 10)
+                    GetItemGoal("apple", 10)
                 ),
                 QuestLink(
                     "Talk to Bob",
                     "Give Bob the 10 apples you just found.",
-                    ClickNPCWithItemGoal("bob", item(Material.APPLE), 10, true),
-                    onGoalComplete = { DialogueChain.startChainForPlayer("bobFoundApples", it) }
+                    ClickNPCWithItemGoal("bob", "apple", 10, true),
+                    onGoalComplete = { DialogueChain.startChainForPlayer("bobsApples", "bobFoundApples", it) }
                 ),
                 QuestLink(
                     "Talk to Bob",
                     "Talk to Bob",
-                    CompleteDialogueGoal("bobFoundApples")
+                    CompleteDialogueGoal("bobsApples", "bobFoundApples")
                 )
             )
         )
 
         // create dialogue
-        bobAskForApples = DialogueChain(
+        DialogueChain(
+            "bobsApples",
             "bobAskForApples",
             arrayOf(
                 DialogueLink(
@@ -133,7 +108,7 @@ object TestStuff {
                 if (player.inventory.heldItemSlot == 0)
                     QuestChain.startForPlayer("bobsApples", player)
                 else
-                    DialogueChain.startChainForPlayer("bobNoApples", player)
+                    DialogueChain.startChainForPlayer("bobsApples", "bobNoApples", player)
             }
         )
     }

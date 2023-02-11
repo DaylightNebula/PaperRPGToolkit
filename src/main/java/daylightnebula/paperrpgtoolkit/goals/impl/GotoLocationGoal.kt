@@ -12,7 +12,7 @@ import java.util.UUID
 
 class GotoLocationGoal(private val location: Vector, private val maxActivateDistance: Float): Listener, Goal() {
 
-    val activePlayers = mutableListOf<UUID>()
+    private val activePlayers = mutableListOf<UUID>()
 
     init {
         Bukkit.getPluginManager().registerEvents(this, PaperRPGToolkit.plugin)
