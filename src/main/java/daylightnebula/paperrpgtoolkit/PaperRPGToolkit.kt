@@ -11,6 +11,7 @@ import daylightnebula.paperrpgtoolkit.npc.RemoveNearbyNPCCommand
 import daylightnebula.paperrpgtoolkit.npc.SpawnNPCCommand
 import daylightnebula.paperrpgtoolkit.quests.AdvanceQuestChainCommand
 import daylightnebula.paperrpgtoolkit.quests.EndQuestChainCommand
+import daylightnebula.paperrpgtoolkit.quests.QuestChain
 import daylightnebula.paperrpgtoolkit.quests.StartQuestChainCommand
 import daylightnebula.paperrpgtoolkit.spawner.CreateMobSpawner
 import daylightnebula.paperrpgtoolkit.spawner.MobSpawner
@@ -48,6 +49,7 @@ class PaperRPGToolkit : JavaPlugin() {
         CustomItem.loadJSONFromFolder(File(dataFolder, "items"))
         DialogueChain.loadJSONFromFolder(File(dataFolder, "dialogue"))
         NPC.loadJsonFromFolder(File(dataFolder, "npcs"))
+        QuestChain.loadJSONFromFolder(File(dataFolder, "quests"))
 
         // start the update loops
         DialogueChain.startUpdateLoop()
@@ -73,6 +75,7 @@ class PaperRPGToolkit : JavaPlugin() {
             CustomItem.loadRemainingJSON()
             DialogueChain.loadWaitingJson()
             NPC.loadWaitingJson()
+            QuestChain.loadWaitingJson()
         }, 1L)
     }
 

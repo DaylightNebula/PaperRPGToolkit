@@ -48,7 +48,7 @@
        - [x] Custom
    - [x] Goals
    - [x] Dialogues (convert to id and sub id pair)
-   - [ ] Quests
+   - [x] Quests
      - [x] Split action for hot bar slot selection
    - [x] Mobs
      - [x] Entity Tasks

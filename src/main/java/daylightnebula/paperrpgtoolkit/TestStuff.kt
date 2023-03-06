@@ -20,28 +20,28 @@ object TestStuff {
 
     fun init() {
         // setup quest chain
-        QuestChain(
-            "bobsApples",
-            "Bobs Apples",
-            "Bob needs your help finding some apples.",
-            arrayOf(
-                QuestLink(
-                    "Find Bobs Apples",
-                    "Pickup 10 apples.",
-                    GetItemGoal("apple", 10)
-                ),
-                QuestLink(
-                    "Talk to Bob",
-                    "Give Bob the 10 apples you just found.",
-                    ClickNPCWithItemGoal("bob", "apple", 10, true),
-                    onGoalComplete = { DialogueChain.startChainForPlayer("bobsApples", "bobFoundApples", it) }
-                ),
-                QuestLink(
-                    "Talk to Bob",
-                    "Talk to Bob",
-                    CompleteDialogueGoal("bobsApples", "bobFoundApples")
-                )
-            )
-        )
+//        QuestChain(
+//            "bobsApples",
+//            "Bobs Apples",
+//            "Bob needs your help finding some apples.",
+//            arrayOf(
+//                QuestLink(
+//                    "Find Bobs Apples",
+//                    "Pickup 10 apples.",
+//                    GetItemGoal("apple", 10)
+//                ),
+//                QuestLink(
+//                    "Talk to Bob",
+//                    "Give Bob the 10 apples you just found.",
+//                    ClickNPCWithItemGoal("bob", "apple", 10, true),
+//                    onGoalComplete = { DialogueChain.startChainForPlayer("bobsApples", "bobFoundApples", it) }
+//                ),
+//                QuestLink(
+//                    "Talk to Bob",
+//                    "Talk to Bob",
+//                    CompleteDialogueGoal("bobsApples", "bobFoundApples")
+//                )
+//            )
+//        )
     }
 }

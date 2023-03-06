@@ -1,10 +1,13 @@
 package daylightnebula.paperrpgtoolkit.quests
 
+import daylightnebula.paperrpgtoolkit.actions.Action
 import daylightnebula.paperrpgtoolkit.buildScoreboard
 import org.bukkit.Bukkit
 import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.util.ChatPaginator
+import org.json.JSONObject
+import java.io.File
 
 class QuestChain(
     val id: String,
@@ -13,16 +16,44 @@ class QuestChain(
     val links: Array<QuestLink>,
 
     // callbacks
-    val onComplete: (player: Player) -> Unit = {},
+    val onComplete: Action?,
 ) {
     companion object {
         val questChains = hashMapOf<String, QuestChain>()
         val curQuest = hashMapOf<Player, String>()
+        val waitingJson = hashMapOf<String, JSONObject>()
+
+        fun loadJSONFromFolder(folder: File) {
+            folder.listFiles()?.forEach { file ->
+                if (file.extension == "json")
+                    waitingJson[file.nameWithoutExtension] = JSONObject(file.readText())
+                else if (file.isDirectory)
+                    loadJSONFromFolder(file)
+            }
+        }
+
+        fun loadWaitingJson() {
+            waitingJson.forEach { (id, json) ->
+                QuestChain(id, json)
+            }
+        }
 
         fun startForPlayer(id: String, player: Player) {
             questChains[id]?.startForPlayer(player)
         }
     }
+
+    constructor(id: String, json: JSONObject): this(
+        id,
+        json.optString("name", ""),
+        json.optString("description", ""),
+        if (json.has("links"))
+            json.getJSONArray("links")
+                .map { QuestLink(it as JSONObject) }
+                .toTypedArray()
+        else emptyArray<QuestLink>(),
+        Action.decode(json.optJSONObject("complete_action"))
+    )
 
     // tracks which
     val linkTracker = hashMapOf<Player, Int>()
@@ -98,7 +129,7 @@ class QuestChain(
 
         // if the player should be rewarded, call on complete
         if (reward)
-            onComplete(player)
+            onComplete?.run(player)
         updateSidebarForPlayer(player)
 
         // notify player that the quest started
