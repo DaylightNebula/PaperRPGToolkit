@@ -37,7 +37,7 @@
    - [x] Maximum active
    - [x] Minimum active
    - [x] Range
- - [ ] Allow for json configs so that code is not always necessary and vice versa
+ - [x] Allow for json configs so that code is not always necessary and vice versa
    - [x] Items
    - [x] NPCs
      - [x] Actions
@@ -52,10 +52,9 @@
      - [x] Split action for hot bar slot selection
    - [x] Mobs
      - [x] Entity Tasks
-   - [ ] Disable normal mob spawning options
-   - [ ] Spawners
  - [ ] Save system
-   - [ ] NPC spawns
+   - [ ] Spawners
+   - [x] NPC spawns
    - [ ] Mob spawns (only those not from a spawner)
    - [ ] Player
      - [ ] Quest state

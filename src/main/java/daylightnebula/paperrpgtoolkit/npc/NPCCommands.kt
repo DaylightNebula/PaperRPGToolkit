@@ -41,7 +41,7 @@ class SpawnNPCCommand: CommandExecutor {
         }
 
         // spawn the NPC
-        npc.spawnAtLocation(location)
+        npc.spawnAtLocation(location, true)
 
         // success
         return true

@@ -16,6 +16,8 @@ import org.bukkit.entity.Mob
 import org.bukkit.entity.Player
 import org.bukkit.entity.Villager
 import org.bukkit.event.player.PlayerInteractEntityEvent
+import org.bukkit.util.Vector
+import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
 import kotlin.IllegalArgumentException
@@ -31,6 +33,12 @@ class NPC(
     companion object {
         val npcs = hashMapOf<String, NPC>()
         private val waitingJson = hashMapOf<String, JSONObject>()
+        val saveFile = File(PaperRPGToolkit.plugin.dataFolder, "save/npcs.json")
+        val saveJson = if (saveFile.exists()) { JSONObject(saveFile.readText()) } else { saveFile.parentFile.mkdirs(); JSONObject() }
+
+        fun saveJsonToFile() {
+            saveFile.writeText(saveJson.toString(1))
+        }
 
         fun loadJsonFromFolder(root: File) {
             root.listFiles()?.forEach { file ->
@@ -44,9 +52,28 @@ class NPC(
         }
 
         fun loadWaitingJson() {
+            // load waiting json
             waitingJson.forEach { (id, json) ->
                 NPC(id, json)
             }
+
+            // spawn saved NPCs
+            Bukkit.getScheduler().runTaskLater(PaperRPGToolkit.plugin, Runnable {
+                saveJson.keys().forEach { key ->
+                    saveJson.getJSONArray(key).forEach { j ->
+                        val arr = j as JSONArray
+                        val location = Location(Bukkit.getWorlds().first(), arr.getDouble(0), arr.getDouble(1), arr.getDouble(2))
+                        location.apply {
+                            this.direction = Vector(
+                                arr.getDouble(3),
+                                arr.getDouble(4),
+                                arr.getDouble(5),
+                            )
+                        }
+                        npcs[key]?.spawnAtLocation(location, false)
+                    }
+                }
+            }, 10L)
         }
 
         fun removeNearLocation(location: Location, radius: Float) {
@@ -81,8 +108,19 @@ class NPC(
         npcs[id] = this
     }
 
-    fun spawnAtLocation(location: Location): Entity {
+    fun spawnAtLocation(location: Location, save: Boolean): Entity {
         val entity = location.world.spawnEntity(location, entityType)
+
+        // save json if necessary
+        if (save) {
+            var subjson = saveJson.optJSONArray(id)
+            if (subjson == null) {
+                subjson = JSONArray()
+                saveJson.put(id, subjson)
+            }
+            subjson.put(arrayOf(location.x, location.y, location.z, location.direction.x, location.direction.y, location.direction.z))
+            saveJsonToFile()
+        }
 
         // cannot be saved but cannot be killed (we will do our own spawning on start)
         entity.isPersistent = false
