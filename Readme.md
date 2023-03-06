@@ -49,6 +49,7 @@
    - [x] Goals
    - [x] Dialogues (convert to id and sub id pair)
    - [ ] Quests
+     - [ ] Split action for hot bar slot selection
    - [x] Mobs
      - [x] Entity Tasks
    - [ ] Disable normal mob spawning options
