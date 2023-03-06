@@ -19,44 +19,6 @@ import java.io.File
 object TestStuff {
 
     fun init() {
-//        val world = Bukkit.getWorlds().first()
-
-        // create NPC
-//        NPC(
-//            "bob",
-//            "§dBob the builder",
-//            EntityType.VILLAGER,
-//            onPlayerInteract = { player ->
-//                DialogueChain.startChainForPlayer("bobsApples", "bobAskForApples", player)
-//            }
-//        )
-
-        // bob yes/no apples dialogues
-//        DialogueChain(
-//            "bobsApples",
-//            "bobNoApples",
-//            arrayOf(
-//                DialogueLink(
-//                    "bob",
-//                    "SMH",
-//                    PressShiftGoal(),
-//                    true
-//                )
-//            )
-//        )
-//        DialogueChain(
-//            "bobsApples",
-//            "bobFoundApples",
-//            arrayOf(
-//                DialogueLink(
-//                    "bob",
-//                    "Thank you for the apples!",
-//                    PressShiftGoal(),
-//                    true
-//                )
-//            )
-//        )
-
         // setup quest chain
         QuestChain(
             "bobsApples",
@@ -80,18 +42,6 @@ object TestStuff {
                     CompleteDialogueGoal("bobsApples", "bobFoundApples")
                 )
             )
-        )
-
-        // create dialogue
-        DialogueChain(
-            "bobsApples",
-            "bobAskForApples",
-            onComplete =  { player ->
-                if (player.inventory.heldItemSlot == 0)
-                    QuestChain.startForPlayer("bobsApples", player)
-                else
-                    DialogueChain.startChainForPlayer("bobsApples", "bobNoApples", player)
-            }
         )
     }
 }

@@ -14,6 +14,7 @@ abstract class Action {
             registerAction("spawn_mob") { ActionSpawnMob(it) }
             registerAction("start_dialogue") { ActionStartDialogue(it) }
             registerAction("start_quest") { ActionStartQuest(it) }
+            registerAction("split_hotbar_slot") { ActionHotbarSplit(it) }
         }
 
         fun decode(json: JSONObject?): Action? {

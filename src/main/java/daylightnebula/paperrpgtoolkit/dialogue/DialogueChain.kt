@@ -1,6 +1,7 @@
 package daylightnebula.paperrpgtoolkit.dialogue
 
 import daylightnebula.paperrpgtoolkit.PaperRPGToolkit
+import daylightnebula.paperrpgtoolkit.actions.Action
 import daylightnebula.paperrpgtoolkit.items.CustomItem
 import io.papermc.paper.entity.LookAnchor
 import org.bukkit.Bukkit
@@ -17,7 +18,7 @@ class DialogueChain(
     val id: String,
     val subid: String,
     private val links: Array<DialogueLink>,
-    val onComplete: (player: Player) -> Unit = {}
+    val onComplete: Action?
 ) {
 
     companion object {
@@ -69,7 +70,7 @@ class DialogueChain(
         }
     }
 
-    constructor(id: String, subid: String, onComplete: (player: Player) -> Unit = {}): this(
+    constructor(id: String, subid: String, onComplete: Action? = null): this(
         id, subid,
         waitingJson.firstOrNull { it.first.equals(id, true) && it.second.equals(subid, true) }?.third
             ?: throw IllegalArgumentException("Could not find waiting json with id $id"),
@@ -77,11 +78,11 @@ class DialogueChain(
     ) {
         waitingJson.removeIf { it.first.equals(id, true) && it.second.equals(subid, true) }
     }
-    constructor(id: String, subid: String, json: JSONObject, onComplete: (player: Player) -> Unit = {}): this(
+    constructor(id: String, subid: String, json: JSONObject, onComplete: Action? = null): this(
         id,
         subid,
         json.optJSONArray("links").map { if (it is JSONObject) DialogueLink(it) else DialogueLink(JSONObject()) }.toTypedArray(),
-        onComplete
+        onComplete ?: Action.decode(json.optJSONObject("complete_action"))
     )
 
     init {
@@ -140,7 +141,7 @@ class DialogueChain(
 
         // call events
         Bukkit.getPluginManager().callEvent(DialogueFinishEvent(player, this))
-        onComplete(player)
+        onComplete?.let { it.run(player) }
 
         // remove the given player from the quest state tracking map
         linkCounter.remove(player)
