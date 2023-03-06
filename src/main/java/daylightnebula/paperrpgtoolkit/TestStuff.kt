@@ -19,17 +19,17 @@ import java.io.File
 object TestStuff {
 
     fun init() {
-        val world = Bukkit.getWorlds().first()
+//        val world = Bukkit.getWorlds().first()
 
         // create NPC
-        NPC(
-            "bob",
-            "§dBob the builder",
-            EntityType.VILLAGER,
-            onPlayerInteract = { player ->
-                DialogueChain.startChainForPlayer("bobsApples", "bobAskForApples", player)
-            }
-        )
+//        NPC(
+//            "bob",
+//            "§dBob the builder",
+//            EntityType.VILLAGER,
+//            onPlayerInteract = { player ->
+//                DialogueChain.startChainForPlayer("bobsApples", "bobAskForApples", player)
+//            }
+//        )
 
         // bob yes/no apples dialogues
 //        DialogueChain(

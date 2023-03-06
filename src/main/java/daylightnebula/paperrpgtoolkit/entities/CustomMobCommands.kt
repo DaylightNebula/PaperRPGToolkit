@@ -22,9 +22,9 @@ class SpawnMobCommand: CommandExecutor {
 
         // try to get the mob with the given id
         val mobID = args.first()
-        val mob = CustomMob.mobs.firstOrNull { it.id == mobID }
+        val mob = CustomMob.mobs[mobID]
         if (mob == null) {
-            sender.sendMessage("Could not find a mob with id $mobID")
+            sender.sendMessage("Could not find a mob with id $mobID, options are ${CustomMob.mobs.map { it.key }}")
             return true
         }
 
@@ -51,7 +51,7 @@ class RemoveNearbyMobsCommand: CommandExecutor {
 
         // try to get the mob with the given id
         val mobID = args.first()
-        val mob = CustomMob.mobs.firstOrNull { it.id == mobID }
+        val mob = CustomMob.mobs[mobID]
         if (mob == null && mobID != "*") {
             sender.sendMessage("Could not find a mob with id $mobID")
             return true
@@ -66,7 +66,7 @@ class RemoveNearbyMobsCommand: CommandExecutor {
 
         // remove nearby entities
         if (mob == null)
-            CustomMob.mobs.forEach { it.removeInRange(sender.location, range) }
+            CustomMob.mobs.forEach { it.value.removeInRange(sender.location, range) }
         else
             mob.removeInRange(sender.location, range)
 

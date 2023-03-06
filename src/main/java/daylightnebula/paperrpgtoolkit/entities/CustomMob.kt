@@ -35,7 +35,7 @@ class CustomMob(
     private val onMobCreate: (mob: Mob) -> Unit = {}
 ) {
     companion object {
-        val mobs = mutableListOf<CustomMob>()
+        val mobs = hashMapOf<String, CustomMob>()
         val waitingJSON = mutableListOf<Pair<String, JSONObject>>()
 
         fun loadJSONFromFolder(file: File) {
@@ -56,12 +56,12 @@ class CustomMob(
 
         fun startUpdateLoop() {
             Bukkit.getScheduler().runTaskTimer(PaperRPGToolkit.plugin, Runnable {
-                mobs.forEach { it.updateAllEntities() }
+                mobs.forEach { it.value.updateAllEntities() }
             }, 1L, 1L)
         }
 
         fun removeAllActiveEntities() {
-            mobs.forEach { mob -> mob.removeAll() }
+            mobs.forEach { mob -> mob.value.removeAll() }
         }
     }
 
@@ -69,7 +69,7 @@ class CustomMob(
     val entities = hashMapOf<Mob, Pair<Location, Int>>() // Format: bukkit entity, current task index
 
     init {
-        mobs.add(this)
+        mobs[id] = this
     }
     constructor(id: String, json: JSONObject, onMobCreate: (mob: Mob) -> Unit = {}): this(
         id,

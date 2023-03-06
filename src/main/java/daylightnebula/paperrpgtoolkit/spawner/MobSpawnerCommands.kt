@@ -23,7 +23,7 @@ class CreateMobSpawner: CommandExecutor {
         }
 
         // try to get custom mob reference or entity type
-        val customMob = CustomMob.mobs.firstOrNull { it.id.equals(args.first(), ignoreCase = true) }
+        val customMob = CustomMob.mobs[args.first()]
         val entityType = EntityType.values().firstOrNull { it.name.equals(args.first(), ignoreCase = true) }
         if (customMob == null && entityType == null) {
             sender.sendMessage("Could not convert the first argument to a custom mob reference or a entity type")

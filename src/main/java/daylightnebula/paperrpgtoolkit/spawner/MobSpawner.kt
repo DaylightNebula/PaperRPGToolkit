@@ -32,7 +32,7 @@ class MobSpawner(
     }
 
     private val activeEntities = mutableListOf<Entity>()
-    private val customMob: CustomMob? = CustomMob.mobs.firstOrNull { it.id.equals(targetType, true) }
+    private val customMob: CustomMob? = CustomMob.mobs[targetType]
     private val entityType: EntityType? = EntityType.values().firstOrNull { it.name.equals(targetType, true) }
 
     init {

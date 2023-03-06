@@ -3,6 +3,7 @@ package daylightnebula.paperrpgtoolkit.npc
 import com.destroystokyo.paper.entity.ai.GoalKey
 import com.destroystokyo.paper.entity.ai.GoalType
 import daylightnebula.paperrpgtoolkit.PaperRPGToolkit
+import daylightnebula.paperrpgtoolkit.actions.Action
 import daylightnebula.paperrpgtoolkit.goals.Goal
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
@@ -15,19 +16,38 @@ import org.bukkit.entity.Mob
 import org.bukkit.entity.Player
 import org.bukkit.entity.Villager
 import org.bukkit.event.player.PlayerInteractEntityEvent
-import java.util.*
+import org.json.JSONObject
+import java.io.File
+import kotlin.IllegalArgumentException
 import kotlin.math.pow
 
 class NPC(
     val id: String,
     val name: String?,
     private val entityType: EntityType,
-    private val onCreateNew: (entity: Entity) -> Unit = {},
-    private val onPlayerInteract: (player: Player) -> Unit = {}
+    private val onClickAction: Action?
 ) {
 
     companion object {
         val npcs = hashMapOf<String, NPC>()
+        private val waitingJson = hashMapOf<String, JSONObject>()
+
+        fun loadJsonFromFolder(root: File) {
+            root.listFiles()?.forEach { file ->
+                if (file.extension == "json") {
+                    val json = JSONObject(file.readText())
+                    val id = json.getString("id")
+                    waitingJson[id] = json
+                } else if (file.isDirectory)
+                    loadJsonFromFolder(file)
+            }
+        }
+
+        fun loadWaitingJson() {
+            waitingJson.forEach { (id, json) ->
+                NPC(id, json)
+            }
+        }
 
         fun removeNearLocation(location: Location, radius: Float) {
             // get nearby entities and loop through them
@@ -44,6 +64,16 @@ class NPC(
             npcs.values.forEach { it.removeEntities(it.entities) }
         }
     }
+
+    constructor(id: String): this(id, waitingJson[id] ?: throw IllegalArgumentException("Could not find json for id $id"))
+
+    constructor(id: String, json: JSONObject): this(
+        id,
+        json.getString("name"),
+        EntityType.values().firstOrNull { it.name.equals(json.getString("type"), ignoreCase = true) }
+            ?: throw IllegalArgumentException("No entity type matches ${json.getString("type")}"),
+        Action.decode(json.optJSONObject("on_click_action"))
+    )
 
     val entities = mutableListOf<Entity>()
 
@@ -76,9 +106,6 @@ class NPC(
             entity.isCustomNameVisible = true
         }
 
-        // call create new callback
-        onCreateNew(entity)
-
         // save to active npc list
         entities.add(entity)
 
@@ -87,7 +114,7 @@ class NPC(
     }
 
     fun onRightClick(event: PlayerInteractEntityEvent) {
-        onPlayerInteract(event.player)
+        onClickAction?.run(event.player)
     }
 
     fun removeEntities(toRemove: List<Entity>) {

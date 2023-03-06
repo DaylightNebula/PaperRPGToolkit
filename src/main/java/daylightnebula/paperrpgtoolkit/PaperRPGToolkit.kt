@@ -47,6 +47,7 @@ class PaperRPGToolkit : JavaPlugin() {
         CustomMob.loadJSONFromFolder(File(dataFolder, "mobs"))
         CustomItem.loadJSONFromFolder(File(dataFolder, "items"))
         DialogueChain.loadJSONFromFolder(File(dataFolder, "dialogue"))
+        NPC.loadJsonFromFolder(File(dataFolder, "npcs"))
 
         // start the update loops
         DialogueChain.startUpdateLoop()
@@ -71,6 +72,7 @@ class PaperRPGToolkit : JavaPlugin() {
             CustomMob.loadRemainingJSON()
             CustomItem.loadRemainingJSON()
             DialogueChain.loadWaitingJson()
+            NPC.loadWaitingJson()
         }, 1L)
     }
 

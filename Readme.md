@@ -39,16 +39,16 @@
    - [x] Range
  - [ ] Allow for json configs so that code is not always necessary and vice versa
    - [x] Items
-   - [ ] NPCs
-     - [ ] On click actions
-       - [ ] Start dialogue
-       - [ ] Start quest
-       - [ ] Give custom item
-       - [ ] Spawn mob (with amount) (both custom and not)
-       - [ ] Custom
+   - [x] NPCs
+     - [x] Actions
+       - [x] Start dialogue
+       - [x] Start quest
+       - [x] Give item
+       - [x] Spawn mob (with amount) (both custom and not)
+       - [x] Custom
    - [x] Goals
    - [x] Dialogues (convert to id and sub id pair)
-   - [ ] Quests (convert to id and sub id pair)
+   - [ ] Quests
    - [x] Mobs
      - [x] Entity Tasks
    - [ ] Disable normal mob spawning options
