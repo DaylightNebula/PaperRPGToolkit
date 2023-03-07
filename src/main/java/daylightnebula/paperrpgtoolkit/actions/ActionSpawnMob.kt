@@ -70,7 +70,7 @@ class ActionSpawnMob(
                                     Random.nextFloat()
                                 )
                             )
-                    )
+                    ), false
                 )
             }
         }

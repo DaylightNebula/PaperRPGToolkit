@@ -29,7 +29,7 @@ class SpawnMobCommand: CommandExecutor {
         }
 
         // spawn the mob at the player
-        mob.spawnEntityAtLocation(sender.location)
+        mob.spawnEntityAtLocation(sender.location, true)
 
         return true
     }

@@ -63,10 +63,14 @@ class CustomMob(
         fun removeAllActiveEntities() {
             mobs.forEach { mob -> mob.value.removeAll() }
         }
+
+        fun disable() {
+            mobs.forEach { it.value.disable() }
+        }
     }
 
     val dnComponents = Component.text(displayName)
-    val entities = hashMapOf<Mob, Pair<Location, Int>>() // Format: bukkit entity, current task index
+    val entities = hashMapOf<Mob, Triple<Location, Int, Boolean>>() // Format: bukkit entity relative to spawn location, current task index, and save
 
     init {
         mobs[id] = this
@@ -96,7 +100,7 @@ class CustomMob(
         waitingJSON.removeIf { it.first == id }
     }
 
-    fun spawnEntityAtLocation(location: Location): Mob {
+    fun spawnEntityAtLocation(location: Location, save: Boolean): Mob {
         // spawn entity and make sure it is a mob
         val entity = location.world.spawnEntity(location, supertype) as? Mob ?: throw IllegalArgumentException("Entity type give must be a mob")
 
@@ -132,7 +136,7 @@ class CustomMob(
         onMobCreate(entity)
 
         // track the entity
-        entities[entity] = Pair(location, getTaskForEntity(entity))
+        entities[entity] = Triple(location, getTaskForEntity(entity), save)
         startCurrentTaskForEntity(entity)
 
         // return the final entity
@@ -161,7 +165,7 @@ class CustomMob(
 
             // stop the current task and swap to and then star the next task
             stopCurrentTaskForEntity(mob)
-            entities[mob] = Pair(entities[mob]?.first ?: mob.location, taskID)
+            entities[mob] = Triple(entities[mob]?.first ?: mob.location, taskID, entities[mob]?.third ?: false)
             startCurrentTaskForEntity(mob)
         }
     }
@@ -195,5 +199,9 @@ class CustomMob(
             it.key.remove()
         }
         entities.clear()
+    }
+
+    fun disable() {
+        removeAll()
     }
 }

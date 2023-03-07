@@ -94,7 +94,7 @@ class PaperRPGToolkit : JavaPlugin() {
 
     override fun onDisable() {
         // remove any active custom entities
-        NPC.removeAllNPCs()
-        CustomMob.removeAllActiveEntities()
+        NPC.removeAllNPCs(false)
+        CustomMob.disable()
     }
 }

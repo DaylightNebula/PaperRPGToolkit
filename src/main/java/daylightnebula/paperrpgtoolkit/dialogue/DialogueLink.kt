@@ -41,7 +41,7 @@ class DialogueLink(
 
     fun startForPlayer(player: Player) {
         npc = NPC.npcs[npcID]
-        playerToEntity[player] = npc?.entities?.minBy { it.location.distanceSquared(player.location) }
+        playerToEntity[player] = npc?.entities?.keys?.minBy { it.location.distanceSquared(player.location) }
         goal.startForPlayer(player)
         chain.draw(player, this)
     }

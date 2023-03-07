@@ -62,7 +62,7 @@ class RemoveNearbyNPCCommand: CommandExecutor {
         }
 
         // remove the entities
-        NPC.removeNearLocation(sender.location, killRadius)
+        NPC.removeNearLocation(sender.location, killRadius, true)
 
         // success
         return true

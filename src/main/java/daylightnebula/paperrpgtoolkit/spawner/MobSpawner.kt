@@ -64,7 +64,7 @@ class MobSpawner(
         val spawnLocation = getRandomLocationInRange(rootLocation.world) ?: rootLocation
         if (customMob != null) {
             activeEntities.add(
-                customMob.spawnEntityAtLocation(spawnLocation)
+                customMob.spawnEntityAtLocation(spawnLocation, false)
             )
         } else if (entityType != null) {
             rootLocation.world.spawnEntity(spawnLocation, entityType)

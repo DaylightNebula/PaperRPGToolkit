@@ -20,6 +20,7 @@ import org.bukkit.util.Vector
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
+import java.util.UUID
 import kotlin.IllegalArgumentException
 import kotlin.math.pow
 
@@ -37,7 +38,20 @@ class NPC(
         val saveJson = if (saveFile.exists()) { JSONObject(saveFile.readText()) } else { saveFile.parentFile.mkdirs(); JSONObject() }
 
         fun saveJsonToFile() {
-            saveFile.writeText(saveJson.toString(1))
+            val json = JSONObject()
+            npcs.forEach { (id, npc) ->
+                val arr = JSONArray()
+                npc.entities.forEach { (entity, pair) ->
+                    arr.put(
+                        JSONObject()
+                            .put("uuid", pair.first.toString())
+                            .put("position", arrayOf(entity.location.x, entity.location.y, entity.location.z))
+                            .put("direction", arrayOf(entity.location.direction.x, entity.location.direction.y, entity.location.direction.z))
+                    )
+                }
+                json.put(id, arr)
+            }
+            saveFile.writeText(json.toString(1))
         }
 
         fun loadJsonFromFolder(root: File) {
@@ -61,34 +75,38 @@ class NPC(
             Bukkit.getScheduler().runTaskLater(PaperRPGToolkit.plugin, Runnable {
                 saveJson.keys().forEach { key ->
                     saveJson.getJSONArray(key).forEach { j ->
-                        val arr = j as JSONArray
-                        val location = Location(Bukkit.getWorlds().first(), arr.getDouble(0), arr.getDouble(1), arr.getDouble(2))
+                        val json = j as JSONObject
+                        val uuid = UUID.fromString(json.getString("uuid"))
+                        val locationArr = json.getJSONArray("position")
+                        val directionArr = json.getJSONArray("direction")
+                        val location = Location(Bukkit.getWorlds().first(), locationArr.getDouble(0), locationArr.getDouble(1), locationArr.getDouble(2))
                         location.apply {
                             this.direction = Vector(
-                                arr.getDouble(3),
-                                arr.getDouble(4),
-                                arr.getDouble(5),
+                                directionArr.getDouble(0),
+                                directionArr.getDouble(1),
+                                directionArr.getDouble(2),
                             )
                         }
-                        npcs[key]?.spawnAtLocation(location, false)
+                        npcs[key]?.spawnAtLocation(location, false, uuid)
                     }
                 }
             }, 10L)
         }
 
-        fun removeNearLocation(location: Location, radius: Float) {
+        fun removeNearLocation(location: Location, radius: Float, save: Boolean) {
             // get nearby entities and loop through them
             val radiusSq = radius.pow(2f)
             npcs.values.forEach { npc ->
                 npc.removeEntities(
-                    npc.entities.filter { it.location.distanceSquared(location) < radiusSq }
+                    npc.entities.keys.filter { it.location.distanceSquared(location) < radiusSq },
+                    save
                 )
             }
         }
 
-        fun removeAllNPCs() {
+        fun removeAllNPCs(save: Boolean) {
             // remove all the npcs entities
-            npcs.values.forEach { it.removeEntities(it.entities) }
+            npcs.values.forEach { it.removeEntities(it.entities.keys.toList(), save) }
         }
     }
 
@@ -102,25 +120,14 @@ class NPC(
         Action.decode(json.optJSONObject("on_click_action"))
     )
 
-    val entities = mutableListOf<Entity>()
+    val entities = hashMapOf<Entity, Pair<UUID, Boolean>>()
 
     init {
         npcs[id] = this
     }
 
-    fun spawnAtLocation(location: Location, save: Boolean): Entity {
+    fun spawnAtLocation(location: Location, save: Boolean, uuid: UUID = UUID.randomUUID()): Entity {
         val entity = location.world.spawnEntity(location, entityType)
-
-        // save json if necessary
-        if (save) {
-            var subjson = saveJson.optJSONArray(id)
-            if (subjson == null) {
-                subjson = JSONArray()
-                saveJson.put(id, subjson)
-            }
-            subjson.put(arrayOf(location.x, location.y, location.z, location.direction.x, location.direction.y, location.direction.z))
-            saveJsonToFile()
-        }
 
         // cannot be saved but cannot be killed (we will do our own spawning on start)
         entity.isPersistent = false
@@ -145,7 +152,9 @@ class NPC(
         }
 
         // save to active npc list
-        entities.add(entity)
+        entities[entity] = Pair(uuid, save)
+
+        if (save) saveJsonToFile()
 
         // return the entity
         return entity
@@ -155,9 +164,12 @@ class NPC(
         onClickAction?.run(event.player)
     }
 
-    fun removeEntities(toRemove: List<Entity>) {
+    fun removeEntities(toRemove: List<Entity>, save: Boolean) {
         // kill all the entities and remove them from the entities list
-        toRemove.forEach { it.remove() }
-        entities.removeAll(toRemove)
+        toRemove.forEach { entity ->
+            entity.remove()
+            entities.remove(entity)
+        }
+        if (save) saveJsonToFile()
     }
 }
