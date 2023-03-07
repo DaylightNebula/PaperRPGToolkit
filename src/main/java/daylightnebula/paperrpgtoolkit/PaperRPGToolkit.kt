@@ -76,6 +76,7 @@ class PaperRPGToolkit : JavaPlugin() {
             DialogueChain.loadWaitingJson()
             NPC.loadWaitingJson()
             QuestChain.loadWaitingJson()
+            MobSpawner.finalizeInitialization()
         }, 1L)
     }
 

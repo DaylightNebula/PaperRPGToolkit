@@ -54,7 +54,8 @@ class CreateMobSpawner: CommandExecutor {
         val maxTicksBetweenSpawn = tryToGetArgumentAsInt(args, 8) ?: 500
 
         // create spawner
-        MobSpawner(location, entityType?.name ?: "", radius, minTicksBetweenSpawn, maxTicksBetweenSpawn, minChildren, maxChildren)
+        val spawner = MobSpawner(location, customMob?.id ?: entityType?.name ?: "", radius, minTicksBetweenSpawn, maxTicksBetweenSpawn, minChildren, maxChildren)
+        spawner.save()
 
         // success
         return true
@@ -89,7 +90,7 @@ class RemoveNearbySpawners: CommandExecutor {
 
         val radiusSq = radius.pow(2f)
         val toRemove = MobSpawner.activeSpawners.filter { it.rootLocation.distanceSquared(sender.location) < radiusSq }
-        toRemove.forEach { it.removeActiveEntities() }
+        toRemove.forEach { it.removeActiveEntities(true) }
         MobSpawner.activeSpawners.removeAll(toRemove)
 
         return true

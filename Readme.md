@@ -53,7 +53,7 @@
    - [x] Mobs
      - [x] Entity Tasks
  - [ ] Save system
-   - [ ] Spawners
+   - [x] Spawners
    - [x] NPC spawns
    - [ ] Mob spawns (only those not from a spawner)
    - [ ] Player
