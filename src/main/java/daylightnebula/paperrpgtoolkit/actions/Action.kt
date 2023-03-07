@@ -15,6 +15,7 @@ abstract class Action {
             registerAction("start_dialogue") { ActionStartDialogue(it) }
             registerAction("start_quest") { ActionStartQuest(it) }
             registerAction("split_hotbar_slot") { ActionHotbarSplit(it) }
+            registerAction("run_quest_completed_state") { ActionRunOnQuestCompletedState(it) }
         }
 
         fun decode(json: JSONObject?): Action? {

@@ -6,5 +6,5 @@ import org.json.JSONObject
 
 class ActionStartQuest(private val chainID: String): Action() {
     constructor(json: JSONObject): this(json.getString("quest"))
-    override fun run(player: Player) { QuestChain.startForPlayer(chainID, player) }
+    override fun run(player: Player) { QuestChain.startQuestForPlayer(player, chainID) }
 }

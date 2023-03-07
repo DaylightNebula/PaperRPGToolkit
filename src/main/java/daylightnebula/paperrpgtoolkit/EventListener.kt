@@ -4,6 +4,7 @@ import daylightnebula.paperrpgtoolkit.dialogue.DialogueChain
 import daylightnebula.paperrpgtoolkit.goals.impl.ClickNPCWithItemGoal
 import daylightnebula.paperrpgtoolkit.items.CustomItem
 import daylightnebula.paperrpgtoolkit.npc.NPC
+import daylightnebula.paperrpgtoolkit.quests.QuestChain
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -11,9 +12,16 @@ import org.bukkit.event.player.AsyncPlayerChatEvent
 import org.bukkit.event.player.PlayerChatEvent
 import org.bukkit.event.player.PlayerInteractEntityEvent
 import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.persistence.PersistentDataType
 
 class EventListener : Listener {
+
+    @EventHandler
+    fun onPlayerJoin(event: PlayerJoinEvent) {
+        QuestChain.playerJoin(event.player)
+    }
+
     @EventHandler
     fun onPlayerInteract(event: PlayerInteractEvent) {
         handleCustomItemInteractEvent(event)

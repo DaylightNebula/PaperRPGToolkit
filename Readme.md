@@ -52,16 +52,12 @@
      - [x] Split action for hot bar slot selection
    - [x] Mobs
      - [x] Entity Tasks
- - [ ] Save system
+ - [x] Save system
    - [x] Spawners
    - [x] NPC spawns
-   - [ ] Mob spawns (only those not from a spawner)
-   - [ ] Player
-     - [ ] Quest state
-     - [ ] Quests completed
-       - [ ] Update quest complete function to report if the player finished the quest for the first time
-     - [ ] Dialogues completed
-       - [ ] Update dialogue complete function to report if the player finished the dialogue for the first time
+   - [x] Player
+     - [x] Quest state
+     - [x] Quests completed
  - [ ] Custom Resource Pack
    - [ ] Generate item models from .bbmodel files or just textures
    - [ ] Add custom model support for items

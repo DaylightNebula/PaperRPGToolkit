@@ -97,5 +97,6 @@ class PaperRPGToolkit : JavaPlugin() {
         // remove any active custom entities
         NPC.removeAllNPCs(false)
         CustomMob.disable()
+        QuestChain.disable()
     }
 }
