@@ -1,0 +1,39 @@
+{
+  "name": "Bobs Apples",
+  "description": "Bob needs your help finding some apples.",
+  "links": [
+    {
+      "name": "Find Bobs Apples",
+      "description": "Pickup 10 apples.",
+      "goal": {
+        "type": "get_item",
+        "item": "apple",
+        "amount": 10
+      }
+    },
+    {
+      "name": "Talk to Bob",
+      "description": "Give Bob the 10 apples you just found.",
+      "goal": {
+        "type": "click_npc",
+        "npc": "bob",
+        "item": "apple",
+        "amount": 10
+      },
+      "complete_action": {
+        "type": "start_dialogue",
+        "id": "bobsApples",
+        "subid": "bobFoundApples"
+      }
+    },
+    {
+      "name": "Talk to Bob",
+      "description": "Talk to Bob",
+      "goal": {
+        "type": "complete_dialogue",
+        "id": "bobsApples",
+        "subid": "bobFoundApples"
+      }
+    }
+  ]
+}

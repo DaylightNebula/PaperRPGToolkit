@@ -1,66 +1,24 @@
+# Paper RPG Toolkit
+This is a project to make a simple toolkit for making a RPG with a Paper Minecraft server.
 
- - [x] Custom Items (and weapons) (register at start up for resource pack generation)
-   - [x] Custom item give command
-   - [x] Fields and functions to set attack speed and damage
-   - [x] Left and right click detection (with limits on both (1/2 second))
-   - [x] Name and description fields that convert to components
- - [x] Quest Chains
-   - [x] Start and force end quest command
-   - [x] Current quest shows up in the sidebar
-   - [x] Quests goals:
-     - [x] Collect item (with number)
-     - [x] Collect custom item
-     - [x] Go to location (with acceptable radius)
-     - [x] Kill number of entities (optional location and radius to get the kills)
- - [x] NPCs
-   - [x] Spawn NPC command
-   - [x] Remove NPC command
-   - [x] Right click detection
-   - [x] Goal: Give item to NPC (click NPC with item) (optional remove item)
-   - [x] Goal: Finish dialogue (talk to NPC goal, idea is that it is better to finish the goal after the dialogue is done)
-   - [x] Dialogue
-     - [x] Dialogue chains
-     - [x] Lock player into chat
-       - [x] Disable standard chat for the player while they are in the dialogue
-     - [x] Dialogue goals
-       - [x] Convert quest goals to general purpose goals
-       - [x] Press shift goal
-       - [x] Press hot bar number and switch dialogue chain
- - [x] Custom Mobs
-   - [x] Entity Tasks
-     - [x] Wander near point (average time between wander and well as spread) (take over when out of range option)
-     - [x] Stay at point 
-     - [x] Attack nearby players
-   - [x] Spawn command
-   - [x] Update "kill number of entities" goal to account for custom mobs accordingly
- - [x] Custom Mob Spawner
-   - [x] Maximum active
-   - [x] Minimum active
-   - [x] Range
- - [x] Allow for json configs so that code is not always necessary and vice versa
-   - [x] Items
-   - [x] NPCs
-     - [x] Actions
-       - [x] Start dialogue
-       - [x] Start quest
-       - [x] Give item
-       - [x] Spawn mob (with amount) (both custom and not)
-       - [x] Custom
-   - [x] Goals
-   - [x] Dialogues (convert to id and sub id pair)
-   - [x] Quests
-     - [x] Split action for hot bar slot selection
-   - [x] Mobs
-     - [x] Entity Tasks
- - [x] Save system
-   - [x] Spawners
-   - [x] NPC spawns
-   - [x] Player
-     - [x] Quest state
-     - [x] Quests completed
- - [x] Permissions
-   - [x] Custom Item Command
-   - [x] Start and force stop quest commands
-   - [x] Spawn NPC command
-   - [x] Spawn custom mob command
-   - [x] Make spawner area for custom mobs visible
+Currently supported server versions: 1.19.x
+
+## Features
+- Dialogues
+- NPCs
+- Quests
+- Custom Items
+- Custom Mobs
+- Customizable Mob Camps (Spawners)
+- Flexible actions and goals for quests and dialogues
+
+## Documentaion
+[Actions](documentation/Actions.md)\
+[Dialogues](documentation/Dialogues.md)\
+[Goals](documentation/Goals.md)\
+[Items](documentation/Items.md)\
+[Mobs](documentation/Mobs.md)\
+[Mob Spawners](documentation/MobSpawners.md)\
+[NPCs](documentation/NPCs.md)\
+[Quests](documentation/Quests.md)
+[Tasks](documentation/Tasks.md)

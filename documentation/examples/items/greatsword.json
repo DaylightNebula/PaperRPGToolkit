@@ -1,0 +1,8 @@
+{
+  "displayName": "Great Sword",
+  "description": "The best great sword!",
+  "sourceMaterial": "IRON_SWORD",
+  "damage": 9.0,
+  "speed": 4.0,
+  "knockback": 4.0
+}

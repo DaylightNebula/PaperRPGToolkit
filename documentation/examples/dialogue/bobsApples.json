@@ -1,0 +1,62 @@
+[
+  {
+    "id": "bobAskForApples",
+    "links": [
+      {
+        "npc": "bob",
+        "text": "Hi.  My name is Bob.",
+        "goal": {
+          "type": "press_shift"
+        }
+      },
+      {
+        "npc": "bob",
+        "text": "Can you help me find 10 apples?",
+        "goal": {
+          "type": "select_number",
+          "min": 0,
+          "max": 1
+        },
+        "options": [ "Yes", "No" ]
+      }
+    ],
+    "complete_action": {
+      "type": "split_hotbar_slot",
+      "actions": [
+        {
+          "type": "start_quest",
+          "quest": "bobsApples"
+        },
+        {
+          "type": "start_dialogue",
+          "id": "bobsApples",
+          "subid": "bobNoApples"
+        }
+      ]
+    }
+  },
+  {
+    "id": "bobFoundApples",
+    "links": [
+      {
+        "npc": "bob",
+        "text": "Thank you for the apples!",
+        "goal": {
+          "type": "press_shift"
+        }
+      }
+    ]
+  },
+  {
+    "id": "bobNoApples",
+    "links": [
+      {
+        "npc": "bob",
+        "text": "SMH",
+        "goal": {
+          "type": "press_shift"
+        }
+      }
+    ]
+  }
+]

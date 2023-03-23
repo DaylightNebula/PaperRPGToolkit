@@ -1,0 +1,10 @@
+{
+  "id": "bob",
+  "name": "§dBob the builder",
+  "type": "VILLAGER",
+  "on_click_action": {
+    "type": "start_dialogue",
+    "id": "bobsApples",
+    "subid": "bobAskForApples"
+  }
+}

@@ -43,7 +43,7 @@ abstract class Goal(
                 )
                 "kill_entity" -> KillEntityGoal(
                     json.optString("entity", ""),
-                    json.optInt("kills", 0),
+                    json.optInt("kills", 1),
                     if (json.has("location"))
                         Vector(
                             json.getJSONArray("location").getDouble(0),
