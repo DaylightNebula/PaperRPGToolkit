@@ -14,7 +14,7 @@ class CreateMobSpawner: CommandExecutor {
     // /createmobspawner <custom mob id or entity type> <radius> [<x> <y> <z>] [<min children> <max children>] [<min time between spawn> <max time between spawn>]
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>?): Boolean {
         if (sender !is Player) return false
-        if (!sender.isOp) return false
+        if (!sender.hasPermission("rpgtoolkit.createmobspawner")) return false
 
         // send args back if necessary
         if (args == null || (args.size != 2 && args.size != 5 && args.size != 7 && args.size != 9)) {
@@ -75,7 +75,7 @@ class RemoveNearbySpawners: CommandExecutor {
     // /removenearbyspawners <radius>
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>?): Boolean {
         if (sender !is Player) return false
-        if (!sender.isOp) return false
+        if (!sender.hasPermission("rpgtoolkit.removespawners")) return false
 
         if (args == null || args.isEmpty()) {
             sender.sendMessage("/removenearbyspawners <radius>")
@@ -92,6 +92,25 @@ class RemoveNearbySpawners: CommandExecutor {
         val toRemove = MobSpawner.activeSpawners.filter { it.rootLocation.distanceSquared(sender.location) < radiusSq }
         toRemove.forEach { it.removeActiveEntities(true) }
         MobSpawner.activeSpawners.removeAll(toRemove)
+
+        return true
+    }
+}
+class ToggleMobSpawnerVisible: CommandExecutor {
+    override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>?): Boolean {
+        // make sure sender is player and has permission
+        val player = sender as? Player ?: return false
+        if (!player.hasPermission("rpgtoolkit.togglespawnervisible")) return false
+
+        // get toggle state and a string to represent it
+        val newstate = !MobSpawner.adminPlayers.contains(player)
+        val newstatestring = if (newstate) "on" else "off"
+
+        // do the toggle
+        if (newstate) MobSpawner.adminPlayers.add(player) else MobSpawner.adminPlayers.remove(player)
+
+        // report to the user
+        player.sendMessage("Setting mob spawner visible to $newstatestring")
 
         return true
     }

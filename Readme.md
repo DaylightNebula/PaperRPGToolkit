@@ -58,12 +58,9 @@
    - [x] Player
      - [x] Quest state
      - [x] Quests completed
- - [ ] Permissions
-   - [ ] Custom Item Command
-   - [ ] Start and force stop quest commands
-   - [ ] Spawn NPC command
-   - [ ] Custom blocks get command
-   - [ ] Spawn custom mob command
-   - [ ] Make spawner area for custom mobs visible
-   - [ ] Area protection create and ignore
-   - [ ] Area PvP protection create and ignore
+ - [x] Permissions
+   - [x] Custom Item Command
+   - [x] Start and force stop quest commands
+   - [x] Spawn NPC command
+   - [x] Spawn custom mob command
+   - [x] Make spawner area for custom mobs visible

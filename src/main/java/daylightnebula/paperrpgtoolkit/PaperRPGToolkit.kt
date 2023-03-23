@@ -16,6 +16,7 @@ import daylightnebula.paperrpgtoolkit.quests.StartQuestChainCommand
 import daylightnebula.paperrpgtoolkit.spawner.CreateMobSpawner
 import daylightnebula.paperrpgtoolkit.spawner.MobSpawner
 import daylightnebula.paperrpgtoolkit.spawner.RemoveNearbySpawners
+import daylightnebula.paperrpgtoolkit.spawner.ToggleMobSpawnerVisible
 import org.bukkit.Bukkit
 import org.bukkit.Difficulty
 import org.bukkit.GameRule
@@ -91,6 +92,7 @@ class PaperRPGToolkit : JavaPlugin() {
         this.getCommand("removenearbymobs")?.setExecutor(RemoveNearbyMobsCommand())
         this.getCommand("createmobspawner")?.setExecutor(CreateMobSpawner())
         this.getCommand("removenearbyspawners")?.setExecutor(RemoveNearbySpawners())
+        this.getCommand("togglespawnervisible")?.setExecutor(ToggleMobSpawnerVisible())
     }
 
     override fun onDisable() {

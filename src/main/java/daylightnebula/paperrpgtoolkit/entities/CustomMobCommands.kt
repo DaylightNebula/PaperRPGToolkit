@@ -12,7 +12,7 @@ class SpawnMobCommand: CommandExecutor {
             sender.sendMessage("This command must be used by players")
             return false
         }
-        if (!sender.isOp) return false
+        if (!sender.hasPermission("rpgtoolkit.spawnmob")) return false
 
         // make sure arguments are of the right length, if not, send argument template and cancel
         if (args == null || args.isEmpty()) {
@@ -41,7 +41,7 @@ class RemoveNearbyMobsCommand: CommandExecutor {
             sender.sendMessage("This command must be used by players")
             return false
         }
-        if (!sender.isOp) return false
+        if (!sender.hasPermission("rpgtoolkit.removemob")) return false
 
         // make sure arguments are of the right length, if not, send argument template and cancel
         if (args == null || args.size != 2) {

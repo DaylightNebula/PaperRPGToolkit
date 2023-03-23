@@ -11,7 +11,7 @@ class SpawnNPCCommand: CommandExecutor {
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>?): Boolean {
         // make sure the sender is a player
         if (sender !is Player) return false
-        if (!sender.isOp) return false
+        if (!sender.hasPermission("rpgtoolkit.spawnnpc")) return false
 
         // if arguments are null or none are given, send command arguments to the user and cancel
         if (args == null || (args.size != 1 && args.size != 4 && args.size != 6)) {
@@ -52,7 +52,7 @@ class RemoveNearbyNPCCommand: CommandExecutor {
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>?): Boolean {
         // make sure the sender is a player
         if (sender !is Player) return false
-        if (!sender.isOp) return false
+        if (!sender.hasPermission("rpgtoolkit.removenpc")) return false
 
         // get kill radius
         val killRadius = if (args != null && args.isNotEmpty()) args.first().toFloatOrNull() else 1f

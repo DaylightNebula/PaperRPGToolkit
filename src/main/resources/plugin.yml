@@ -5,34 +5,95 @@ api-version: 1.19
 load: STARTUP
 authors: [ DaylightNebula ]
 description: An RPG Toolkit for Minecraft Paper Servers
+permissions:
+  rpgtoolkit.getitem:
+    description: Get custom item command permission
+    default: op
+  rpgtoolkit.startquestchain:
+    description: Start quest chain command permission
+    default: op
+  rpgtoolkit.endquestchain:
+    description: End quest chain command permission
+    default: op
+  rpgtoolkit.advancequestchain:
+    description: Advance quest chain command permission
+    default: op
+  rpgtoolkit.spawnnpc:
+    description: Spawn npc command permission
+    default: op
+  rpgtoolkit.removenpc:
+    description: Remove npc command permission
+    default: op
+  rpgtoolkit.spawnmob:
+    description: Spawn mob command permission
+    default: op
+  rpgtoolkit.removemob:
+    description: Remove mob command permission
+    default: op
+  rpgtoolkit.createmobspawner:
+    description: Create mob spawner command permission
+    default: op
+  rpgtoolkit.removespawners:
+    description: Remove mob spawner command permission
+    default: op
+  rpgtoolkit.togglespawnervisible:
+    description: Toggle spawner visible command permission
+    default: op
+  rpgtoolkit.*:
+    children:
+      rpgtoolkit.getitem: true
+      rpgtoolkit.startquestchain: true
+      rpgtoolkit.endquestchain: true
+      rpgtoolkit.advancequestchain: true
+      rpgtoolkit.spawnnpc: true
+      rpgtoolkit.removenpc: true
+      rpgtoolkit.spawnmob: true
+      rpgtoolkit.removemob: true
+      rpgtoolkit.createmobspawner: true
+      rpgtoolkit.removespawners: true
+      rpgtoolkit.togglespawnervisible: true
 commands:
   getcustomitem:
     description: Get custom item
     usage: /getcustomitem <name or id> [amount]
+    permission: rpgtoolkit.getitem
   startquestchain:
     description: Start a quest chain for the sender
     usage: /startquestchain <quest chain id>
+    permission: rpgtoolkit.startquestchain
   endquestchain:
     description: End the senders current quest chain
     usage: /endquestchain
+    permission: rpgtoolkit.endquestchain
   advancequestchain:
     description: Advance the senders current quest chain
     usage: /advancequestchain
+    permission: rpgtoolkit.advancequestchain
   spawnnpc:
     description: Spawn NPC
     usage: /spawnnpc [<x> <y> <z>] [<pitch> <yaw>]
+    permission: rpgtoolkit.spawnnpc
   removenearbynpcs:
     description: Remove nearby NPCs
     usage: /removenearbynpcs [kill radius]
+    permission: rpgtoolkit.removenpc
   spawnmob:
     description: Spawn Custom Mob
     usage: /spawnmob <mob id>
+    permission: rpgtoolkit.spawnmob
   removenearbymobs:
     description: Remove nearby custom mobs of a certain type or of all types
     usage: /removenearbymobs <mob id> <range>
+    permission: rpgtoolkit.removemob
   removenearbyspawners:
     description: Remove nearby spawners
     usage: /removenearbyspawners <radius>
+    permission: rpgtoolkit.removespawners
   createmobspawner:
     description: Creates a new mob spawner
     usage: /createmobspawner <custom mob id or entity type> <radius> [<x> <y> <z>] [<min children> <max children>] [<min time between spawn> <max time between spawn>]
+    permission: rpgtoolkit.createmobspawner
+  togglespawnervisible:
+    description: Toggle whether mob spawners radius is drawn in particles for you
+    usage: /togglespawnervisible
+    permission: rpgtoolkit.togglespawnervisible

@@ -2,17 +2,21 @@ package daylightnebula.paperrpgtoolkit.spawner
 
 import daylightnebula.paperrpgtoolkit.PaperRPGToolkit
 import daylightnebula.paperrpgtoolkit.entities.CustomMob
-import org.bukkit.Bukkit
-import org.bukkit.Location
-import org.bukkit.World
+import org.bukkit.*
+import org.bukkit.Particle.DustOptions
+import org.bukkit.Particle.REDSTONE
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
 import org.bukkit.entity.Entity
 import org.bukkit.entity.EntityType
+import org.bukkit.entity.Player
 import org.bukkit.util.Vector
 import org.json.JSONObject
 import java.io.File
 import java.util.*
+import kotlin.math.PI
+import kotlin.math.cos
+import kotlin.math.sin
 import kotlin.random.Random
 
 class MobSpawner(
@@ -26,6 +30,7 @@ class MobSpawner(
     private val uuid: UUID = UUID.randomUUID()
 ) {
     companion object {
+        val adminPlayers = mutableListOf<Player>()
         val activeSpawners = mutableListOf<MobSpawner>()
         private val saveFile = File(PaperRPGToolkit.plugin.dataFolder, "save/spawner.json")
         private val saveJson = if (saveFile.exists()) JSONObject(saveFile.readText()) else {
@@ -102,7 +107,6 @@ class MobSpawner(
     }
 
     private var spawnTick = 0
-
     fun update() {
         // remove any dead entities
         activeEntities.removeIf { it.isDead }
@@ -120,6 +124,18 @@ class MobSpawner(
             spawnTick = getRandomDurationTicks()
         } else
             spawnTick--
+
+        // draw circle and center position for all admins within range
+        val adminTargets = adminPlayers.filter { it.location.distanceSquared(rootLocation) < 2500.0 }
+        if (adminTargets.isNotEmpty()) {
+            var i = 0.0
+            while (i < 2.0 * PI) {
+                val loc = rootLocation.clone().add(cos(i) * spawnRadius, 0.0, sin(i) * spawnRadius)
+                adminTargets.forEach { it.spawnParticle(REDSTONE, loc, 0, DustOptions(Color.RED, 1f)) }
+                i += PI / 10f
+            }
+            adminTargets.forEach { it.spawnParticle(REDSTONE, rootLocation, 0, DustOptions(Color.RED, 1f)) }
+        }
     }
 
     private fun addEntity() {
